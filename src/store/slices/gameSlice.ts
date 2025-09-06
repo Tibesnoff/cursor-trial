@@ -55,6 +55,7 @@ const initialState: GameState = {
     unlocked: ['basic_research'],
     completed: [],
   },
+  unlockedTabs: ['clicker', 'stats'], // Start with quantum collector and analytics unlocked
   achievements: [],
   statistics: {
     totalClicks: 0,
@@ -97,6 +98,24 @@ const gameSlice = createSlice({
       state.resources.quantumCrystals += crystalGained;
       state.statistics.totalClicks += 1;
       state.statistics.totalCrystalsEarned += crystalGained;
+    },
+
+    unlockTab: (state, action) => {
+      const { tabId, cost } = action.payload;
+      if (!state.unlockedTabs.includes(tabId)) {
+        // Deduct costs
+        if (cost.quantumEnergy) {
+          state.resources.quantumEnergy -= cost.quantumEnergy;
+        }
+        if (cost.quantumCrystals) {
+          state.resources.quantumCrystals -= cost.quantumCrystals;
+        }
+        if (cost.researchData) {
+          state.resources.researchData -= cost.researchData;
+        }
+
+        state.unlockedTabs.push(tabId);
+      }
     },
 
     // Energy Collector Actions
@@ -175,6 +194,8 @@ export const {
   generatePassiveEnergy,
   generateEnergyFromCollectors,
   updatePlayTime,
+  // Tab Actions
+  unlockTab,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

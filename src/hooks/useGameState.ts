@@ -35,3 +35,7 @@ export const useUpgrades = () => {
 export const useStatistics = () => {
   return useAppSelector(state => state.game.statistics);
 };
+
+export const useUnlockedTabs = () => {
+  return useAppSelector(state => state.game.unlockedTabs);
+};

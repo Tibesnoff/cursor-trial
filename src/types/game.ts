@@ -43,6 +43,7 @@ export interface GameState {
     unlocked: string[];
     completed: string[];
   };
+  unlockedTabs: string[];
   achievements: string[];
   statistics: {
     totalClicks: number;

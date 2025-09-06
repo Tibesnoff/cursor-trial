@@ -22,7 +22,7 @@ const deductCost = (state: GameState, cost: any) => {
 
 // Energy Collector Actions
 export const buyBasicCollector = (state: GameState) => {
-  const cost = { quantumEnergy: 10 };
+  const cost = { quantumEnergy: 1000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.energyCollectors.basicCollectors += 1;
@@ -30,7 +30,7 @@ export const buyBasicCollector = (state: GameState) => {
 };
 
 export const buyQuantumReactor = (state: GameState) => {
-  const cost = { quantumEnergy: 50, quantumCrystals: 5 };
+  const cost = { quantumEnergy: 10000, quantumCrystals: 500 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.energyCollectors.quantumReactors += 1;
@@ -38,7 +38,7 @@ export const buyQuantumReactor = (state: GameState) => {
 };
 
 export const buyStellarForge = (state: GameState) => {
-  const cost = { quantumEnergy: 500, quantumCrystals: 25 };
+  const cost = { quantumEnergy: 100000, quantumCrystals: 5000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.energyCollectors.stellarForges += 1;
@@ -46,7 +46,7 @@ export const buyStellarForge = (state: GameState) => {
 };
 
 export const buyVoidExtractor = (state: GameState) => {
-  const cost = { quantumEnergy: 2500, quantumCrystals: 125 };
+  const cost = { quantumEnergy: 1000000, quantumCrystals: 50000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.energyCollectors.voidExtractors += 1;
@@ -55,7 +55,7 @@ export const buyVoidExtractor = (state: GameState) => {
 
 // Crystal Collector Actions
 export const buyBasicMine = (state: GameState) => {
-  const cost = { quantumEnergy: 25 };
+  const cost = { quantumEnergy: 5000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.crystalCollectors.basicMines += 1;
@@ -63,7 +63,7 @@ export const buyBasicMine = (state: GameState) => {
 };
 
 export const buyQuantumDrill = (state: GameState) => {
-  const cost = { quantumEnergy: 125, quantumCrystals: 10 };
+  const cost = { quantumEnergy: 50000, quantumCrystals: 2500 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.crystalCollectors.quantumDrills += 1;
@@ -71,7 +71,7 @@ export const buyQuantumDrill = (state: GameState) => {
 };
 
 export const buyStellarExtractor = (state: GameState) => {
-  const cost = { quantumEnergy: 1250, quantumCrystals: 50 };
+  const cost = { quantumEnergy: 500000, quantumCrystals: 25000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.crystalCollectors.stellarExtractors += 1;
@@ -79,7 +79,7 @@ export const buyStellarExtractor = (state: GameState) => {
 };
 
 export const buyVoidHarvester = (state: GameState) => {
-  const cost = { quantumEnergy: 6250, quantumCrystals: 250 };
+  const cost = { quantumEnergy: 5000000, quantumCrystals: 250000 };
   if (canAffordCost(state, cost)) {
     deductCost(state, cost);
     state.crystalCollectors.voidHarvesters += 1;

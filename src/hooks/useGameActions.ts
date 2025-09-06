@@ -28,6 +28,7 @@ import {
   upgradeCrystalEfficiency,
   unlockResearchNode,
   completeResearchNode,
+  unlockTab,
 } from '../store/slices/gameSlice';
 
 export const useGameActions = () => {
@@ -70,5 +71,9 @@ export const useGameActions = () => {
       dispatch(unlockResearchNode(nodeId)),
     completeResearchNode: (nodeId: string) =>
       dispatch(completeResearchNode(nodeId)),
+
+    // Tab actions
+    unlockTab: (tabId: string, cost: any) =>
+      dispatch(unlockTab({ tabId, cost })),
   };
 };

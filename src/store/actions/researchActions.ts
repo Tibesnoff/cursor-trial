@@ -22,8 +22,8 @@ const deductCost = (state: GameState, cost: any) => {
 export const buyResearchLab = (state: GameState) => {
   const currentCount = state.research.researchLabs;
   const cost = {
-    quantumEnergy: Math.floor(500 * Math.pow(1.3, currentCount)),
-    quantumCrystals: Math.floor(25 * Math.pow(1.3, currentCount)),
+    quantumEnergy: Math.floor(50000 * Math.pow(1.3, currentCount)),
+    quantumCrystals: Math.floor(2500 * Math.pow(1.3, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -35,9 +35,9 @@ export const buyResearchLab = (state: GameState) => {
 export const buyDataCenter = (state: GameState) => {
   const currentCount = state.research.dataCenters;
   const cost = {
-    quantumEnergy: Math.floor(2500 * Math.pow(1.4, currentCount)),
-    quantumCrystals: Math.floor(125 * Math.pow(1.4, currentCount)),
-    researchData: Math.floor(50 * Math.pow(1.4, currentCount)),
+    quantumEnergy: Math.floor(250000 * Math.pow(1.4, currentCount)),
+    quantumCrystals: Math.floor(12500 * Math.pow(1.4, currentCount)),
+    researchData: Math.floor(5000 * Math.pow(1.4, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -49,9 +49,9 @@ export const buyDataCenter = (state: GameState) => {
 export const buyQuantumComputer = (state: GameState) => {
   const currentCount = state.research.quantumComputers;
   const cost = {
-    quantumEnergy: Math.floor(12500 * Math.pow(1.5, currentCount)),
-    quantumCrystals: Math.floor(625 * Math.pow(1.5, currentCount)),
-    researchData: Math.floor(250 * Math.pow(1.5, currentCount)),
+    quantumEnergy: Math.floor(1250000 * Math.pow(1.5, currentCount)),
+    quantumCrystals: Math.floor(62500 * Math.pow(1.5, currentCount)),
+    researchData: Math.floor(25000 * Math.pow(1.5, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -63,9 +63,9 @@ export const buyQuantumComputer = (state: GameState) => {
 export const buyNeuralNetwork = (state: GameState) => {
   const currentCount = state.research.neuralNetworks;
   const cost = {
-    quantumEnergy: Math.floor(50000 * Math.pow(1.6, currentCount)),
-    quantumCrystals: Math.floor(2500 * Math.pow(1.6, currentCount)),
-    researchData: Math.floor(1000 * Math.pow(1.6, currentCount)),
+    quantumEnergy: Math.floor(5000000 * Math.pow(1.6, currentCount)),
+    quantumCrystals: Math.floor(250000 * Math.pow(1.6, currentCount)),
+    researchData: Math.floor(100000 * Math.pow(1.6, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -91,62 +91,62 @@ export const unlockResearchNode = (
   // Find the research node to get its cost
   const researchNodes = [
     { id: 'basic_research', cost: { researchData: 0 } },
-    { id: 'quantum_theory', cost: { researchData: 100 } },
-    { id: 'energy_efficiency', cost: { researchData: 250, quantumEnergy: 50 } },
+    { id: 'quantum_theory', cost: { researchData: 10000 } },
+    { id: 'energy_efficiency', cost: { researchData: 25000, quantumEnergy: 5000 } },
     {
       id: 'stellar_harvesting',
-      cost: { researchData: 1000, quantumEnergy: 500, quantumCrystals: 25 },
+      cost: { researchData: 100000, quantumEnergy: 50000, quantumCrystals: 2500 },
     },
     {
       id: 'void_manipulation',
-      cost: { researchData: 5000, quantumEnergy: 2500, quantumCrystals: 125 },
+      cost: { researchData: 500000, quantumEnergy: 250000, quantumCrystals: 12500 },
     },
     {
       id: 'crystal_refinement',
-      cost: { researchData: 300, quantumCrystals: 30 },
+      cost: { researchData: 30000, quantumCrystals: 3000 },
     },
     {
       id: 'dimensional_mining',
-      cost: { researchData: 1500, quantumEnergy: 750, quantumCrystals: 50 },
+      cost: { researchData: 150000, quantumEnergy: 75000, quantumCrystals: 5000 },
     },
     {
       id: 'quantum_crystallography',
-      cost: { researchData: 7500, quantumEnergy: 3750, quantumCrystals: 250 },
+      cost: { researchData: 750000, quantumEnergy: 375000, quantumCrystals: 25000 },
     },
-    { id: 'defense_systems', cost: { researchData: 400, defensePoints: 20 } },
+    { id: 'defense_systems', cost: { researchData: 40000, defensePoints: 2000 } },
     {
       id: 'shield_technology',
-      cost: { researchData: 2000, quantumEnergy: 1000, defensePoints: 100 },
+      cost: { researchData: 200000, quantumEnergy: 100000, defensePoints: 10000 },
     },
     {
       id: 'weapon_systems',
       cost: {
-        researchData: 10000,
-        quantumEnergy: 5000,
-        quantumCrystals: 500,
-        defensePoints: 500,
+        researchData: 1000000,
+        quantumEnergy: 500000,
+        quantumCrystals: 50000,
+        defensePoints: 50000,
       },
     },
     {
       id: 'ship_design',
-      cost: { researchData: 5000, quantumEnergy: 2500, quantumCrystals: 250 },
+      cost: { researchData: 500000, quantumEnergy: 250000, quantumCrystals: 25000 },
     },
     {
       id: 'combat_systems',
       cost: {
-        researchData: 15000,
-        quantumEnergy: 7500,
-        quantumCrystals: 750,
-        defensePoints: 1000,
+        researchData: 1500000,
+        quantumEnergy: 750000,
+        quantumCrystals: 75000,
+        defensePoints: 100000,
       },
     },
     {
       id: 'fleet_command',
       cost: {
-        researchData: 50000,
-        quantumEnergy: 25000,
-        quantumCrystals: 2500,
-        defensePoints: 5000,
+        researchData: 5000000,
+        quantumEnergy: 2500000,
+        quantumCrystals: 250000,
+        defensePoints: 500000,
       },
     },
   ];

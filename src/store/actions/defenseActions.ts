@@ -22,8 +22,8 @@ const deductCost = (state: GameState, cost: any) => {
 export const buyPowerGrid = (state: GameState) => {
   const currentCount = state.defense.powerGrids;
   const cost = {
-    quantumEnergy: Math.floor(200 * Math.pow(1.2, currentCount)),
-    quantumCrystals: Math.floor(10 * Math.pow(1.2, currentCount)),
+    quantumEnergy: Math.floor(20000 * Math.pow(1.2, currentCount)),
+    quantumCrystals: Math.floor(1000 * Math.pow(1.2, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -35,9 +35,9 @@ export const buyPowerGrid = (state: GameState) => {
 export const buyTransportHub = (state: GameState) => {
   const currentCount = state.defense.transportHubs;
   const cost = {
-    quantumEnergy: Math.floor(1000 * Math.pow(1.3, currentCount)),
-    quantumCrystals: Math.floor(50 * Math.pow(1.3, currentCount)),
-    researchData: Math.floor(25 * Math.pow(1.3, currentCount)),
+    quantumEnergy: Math.floor(100000 * Math.pow(1.3, currentCount)),
+    quantumCrystals: Math.floor(5000 * Math.pow(1.3, currentCount)),
+    researchData: Math.floor(2500 * Math.pow(1.3, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -49,9 +49,9 @@ export const buyTransportHub = (state: GameState) => {
 export const buyDefenseSystem = (state: GameState) => {
   const currentCount = state.defense.defenseSystems;
   const cost = {
-    quantumEnergy: Math.floor(5000 * Math.pow(1.4, currentCount)),
-    quantumCrystals: Math.floor(250 * Math.pow(1.4, currentCount)),
-    researchData: Math.floor(125 * Math.pow(1.4, currentCount)),
+    quantumEnergy: Math.floor(500000 * Math.pow(1.4, currentCount)),
+    quantumCrystals: Math.floor(25000 * Math.pow(1.4, currentCount)),
+    researchData: Math.floor(12500 * Math.pow(1.4, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
@@ -63,9 +63,9 @@ export const buyDefenseSystem = (state: GameState) => {
 export const buyCommunicationArray = (state: GameState) => {
   const currentCount = state.defense.communicationArrays;
   const cost = {
-    quantumEnergy: Math.floor(20000 * Math.pow(1.5, currentCount)),
-    quantumCrystals: Math.floor(1000 * Math.pow(1.5, currentCount)),
-    researchData: Math.floor(500 * Math.pow(1.5, currentCount)),
+    quantumEnergy: Math.floor(2000000 * Math.pow(1.5, currentCount)),
+    quantumCrystals: Math.floor(100000 * Math.pow(1.5, currentCount)),
+    researchData: Math.floor(50000 * Math.pow(1.5, currentCount)),
   };
 
   if (canAffordCost(state, cost)) {
