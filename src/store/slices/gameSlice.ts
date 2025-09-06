@@ -118,6 +118,33 @@ const gameSlice = createSlice({
       }
     },
 
+    // Development actions
+    giveMaxResources: state => {
+      state.resources.quantumEnergy = 999999999;
+      state.resources.quantumCrystals = 999999999;
+      state.resources.researchData = 999999999;
+      state.resources.defensePoints = 999999999;
+    },
+
+    unlockAllTabs: state => {
+      state.unlockedTabs = [
+        'clicker',
+        'crystals',
+        'science',
+        'defense',
+        'stats',
+      ];
+    },
+
+    // Save/Load actions
+    loadGameState: (state, action) => {
+      const loadedState = action.payload;
+      if (loadedState) {
+        // Replace entire state with loaded data
+        Object.assign(state, loadedState);
+      }
+    },
+
     // Energy Collector Actions
     buyBasicCollector: collectorActions.buyBasicCollector,
     buyQuantumReactor: collectorActions.buyQuantumReactor,
@@ -196,6 +223,11 @@ export const {
   updatePlayTime,
   // Tab Actions
   unlockTab,
+  // Development Actions
+  giveMaxResources,
+  unlockAllTabs,
+  // Save/Load Actions
+  loadGameState,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

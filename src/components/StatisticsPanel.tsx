@@ -1,5 +1,6 @@
 import { useGameState } from 'src/hooks';
 import { Card } from 'src/components/ui';
+import { SaveManager } from 'src/components/common';
 
 const StatisticsPanel = () => {
     const { statistics, energyCollectors, crystalCollectors, research, defense } = useGameState();
@@ -58,6 +59,11 @@ const StatisticsPanel = () => {
                     </div>
                 </Card>
 
+            </div>
+
+            {/* Save Manager */}
+            <div className="mt-8">
+                <SaveManager />
             </div>
         </div>
     );

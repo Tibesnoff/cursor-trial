@@ -8,10 +8,24 @@ import {
 import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen } from 'src/components/game';
 import Navigation from 'src/components/Navigation';
 import StatisticsPanel from 'src/components/StatisticsPanel';
+import { useAutoSave } from 'src/hooks/useAutoSave';
+import { loadFromLocalStorage } from 'src/utils/saveManager';
+import { loadGameState } from 'src/store/slices/gameSlice';
 
 const GameContainer = () => {
     const dispatch = useAppDispatch();
     const [activeTab, setActiveTab] = useState('clicker');
+
+    // Enable auto-save
+    useAutoSave();
+
+    // Load saved game on startup
+    useEffect(() => {
+        const savedState = loadFromLocalStorage();
+        if (savedState) {
+            dispatch(loadGameState(savedState));
+        }
+    }, [dispatch]);
 
     // Passive resource generation (crystals, research, defense)
     useEffect(() => {

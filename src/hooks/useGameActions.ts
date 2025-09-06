@@ -29,6 +29,9 @@ import {
   unlockResearchNode,
   completeResearchNode,
   unlockTab,
+  giveMaxResources,
+  unlockAllTabs,
+  loadGameState,
 } from '../store/slices/gameSlice';
 
 export const useGameActions = () => {
@@ -75,5 +78,12 @@ export const useGameActions = () => {
     // Tab actions
     unlockTab: (tabId: string, cost: any) =>
       dispatch(unlockTab({ tabId, cost })),
+
+    // Development actions
+    giveMaxResources: () => dispatch(giveMaxResources()),
+    unlockAllTabs: () => dispatch(unlockAllTabs()),
+
+    // Save/Load actions
+    loadGameState: (state: any) => dispatch(loadGameState(state)),
   };
 };
