@@ -7,11 +7,15 @@ import {
   buyQuantumReactor,
   buyStellarForge,
   buyVoidExtractor,
+  buyDimensionalRift,
+  buyCosmicGenerator,
   // Crystal Collector Actions
   buyBasicMine,
   buyQuantumDrill,
   buyStellarExtractor,
   buyVoidHarvester,
+  buyDimensionalMine,
+  buyCosmicRefinery,
   // Facility Actions
   buyResearchLab,
   buyDataCenter,
@@ -32,6 +36,7 @@ import {
   giveMaxResources,
   unlockAllTabs,
   loadGameState,
+  resetGameState,
 } from '../store/slices/gameSlice';
 
 export const useGameActions = () => {
@@ -47,12 +52,16 @@ export const useGameActions = () => {
     buyQuantumReactor: () => dispatch(buyQuantumReactor()),
     buyStellarForge: () => dispatch(buyStellarForge()),
     buyVoidExtractor: () => dispatch(buyVoidExtractor()),
+    buyDimensionalRift: () => dispatch(buyDimensionalRift()),
+    buyCosmicGenerator: () => dispatch(buyCosmicGenerator()),
 
     // Crystal Collector Actions
     buyBasicMine: () => dispatch(buyBasicMine()),
     buyQuantumDrill: () => dispatch(buyQuantumDrill()),
     buyStellarExtractor: () => dispatch(buyStellarExtractor()),
     buyVoidHarvester: () => dispatch(buyVoidHarvester()),
+    buyDimensionalMine: () => dispatch(buyDimensionalMine()),
+    buyCosmicRefinery: () => dispatch(buyCosmicRefinery()),
 
     // Facility Actions
     buyResearchLab: () => dispatch(buyResearchLab()),
@@ -85,5 +94,6 @@ export const useGameActions = () => {
 
     // Save/Load actions
     loadGameState: (state: any) => dispatch(loadGameState(state)),
+    resetGameState: () => dispatch(resetGameState()),
   };
 };

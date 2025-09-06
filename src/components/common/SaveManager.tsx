@@ -65,7 +65,8 @@ const SaveManager: React.FC = () => {
     const handleClear = () => {
         if (window.confirm('Are you sure you want to clear all save data? This cannot be undone.')) {
             clearSaveData();
-            showMessage('Save data cleared');
+            actions.resetGameState();
+            showMessage('Save data cleared and game reset');
         }
     };
 
@@ -75,8 +76,8 @@ const SaveManager: React.FC = () => {
 
             {message && (
                 <div className={`mb-4 p-2 rounded text-sm ${message.includes('Failed') || message.includes('Invalid') || message.includes('No save')
-                        ? 'bg-red-900 text-red-200'
-                        : 'bg-green-900 text-green-200'
+                    ? 'bg-red-900 text-red-200'
+                    : 'bg-green-900 text-green-200'
                     }`}>
                     {message}
                 </div>

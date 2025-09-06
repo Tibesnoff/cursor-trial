@@ -6,8 +6,9 @@ import {
     updatePlayTime,
 } from 'src/store/slices/gameSlice';
 import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen } from 'src/components/game';
-import Navigation from 'src/components/Navigation';
+import SidebarNavigation from 'src/components/SidebarNavigation';
 import StatisticsPanel from 'src/components/StatisticsPanel';
+import { StickyResourceBar } from 'src/components/common';
 import { useAutoSave } from 'src/hooks/useAutoSave';
 import { loadFromLocalStorage } from 'src/utils/saveManager';
 import { loadGameState } from 'src/store/slices/gameSlice';
@@ -72,12 +73,15 @@ const GameContainer = () => {
     };
 
     return (
-        <div className="w-full min-h-screen px-4 py-8">
-            <Header />
-            <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="w-full min-h-screen">
+            <StickyResourceBar />
+            <SidebarNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-            <div className="max-w-7xl mx-auto">
-                {renderActiveTab()}
+            <div className="lg:ml-64 px-4 py-8 lg:pt-8 pt-20 pb-20 lg:pb-8">
+                <Header />
+                <div className="max-w-6xl mx-auto">
+                    {renderActiveTab()}
+                </div>
             </div>
         </div>
     );

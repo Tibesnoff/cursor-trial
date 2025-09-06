@@ -34,6 +34,8 @@ export function serializeGameState(state: GameState): string {
       qr: state.energyCollectors.quantumReactors,
       sf: state.energyCollectors.stellarForges,
       ve: state.energyCollectors.voidExtractors,
+      dr: state.energyCollectors.dimensionalRifts,
+      cg: state.energyCollectors.cosmicGenerators,
     },
     // Crystal Collectors
     cc: {
@@ -41,6 +43,8 @@ export function serializeGameState(state: GameState): string {
       qd: state.crystalCollectors.quantumDrills,
       se: state.crystalCollectors.stellarExtractors,
       vh: state.crystalCollectors.voidHarvesters,
+      dm: state.crystalCollectors.dimensionalMines,
+      cr: state.crystalCollectors.cosmicRefineries,
     },
     // Research Facilities
     rf: {
@@ -116,12 +120,16 @@ export function deserializeGameState(encodedData: string): GameState | null {
         quantumReactors: saveData.ec.qr || 0,
         stellarForges: saveData.ec.sf || 0,
         voidExtractors: saveData.ec.ve || 0,
+        dimensionalRifts: saveData.ec.dr || 0,
+        cosmicGenerators: saveData.ec.cg || 0,
       },
       crystalCollectors: {
         basicMines: saveData.cc.bm || 0,
         quantumDrills: saveData.cc.qd || 0,
         stellarExtractors: saveData.cc.se || 0,
         voidHarvesters: saveData.cc.vh || 0,
+        dimensionalMines: saveData.cc.dm || 0,
+        cosmicRefineries: saveData.cc.cr || 0,
       },
       research: {
         researchLabs: saveData.rf.rl || 0,

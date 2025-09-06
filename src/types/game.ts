@@ -11,6 +11,8 @@ export interface GameState {
     quantumReactors: number;
     stellarForges: number;
     voidExtractors: number;
+    dimensionalRifts: number;
+    cosmicGenerators: number;
   };
   // Crystal Collectors (new system)
   crystalCollectors: {
@@ -18,6 +20,8 @@ export interface GameState {
     quantumDrills: number;
     stellarExtractors: number;
     voidHarvesters: number;
+    dimensionalMines: number;
+    cosmicRefineries: number;
   };
   // Research Facilities (generate research data)
   research: {

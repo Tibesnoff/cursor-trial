@@ -23,6 +23,8 @@ const initialState: GameState = {
     quantumReactors: 0,
     stellarForges: 0,
     voidExtractors: 0,
+    dimensionalRifts: 0,
+    cosmicGenerators: 0,
   },
   // Crystal Collectors (new system)
   crystalCollectors: {
@@ -30,6 +32,8 @@ const initialState: GameState = {
     quantumDrills: 0,
     stellarExtractors: 0,
     voidHarvesters: 0,
+    dimensionalMines: 0,
+    cosmicRefineries: 0,
   },
   // Research Facilities (generate research data)
   research: {
@@ -145,17 +149,26 @@ const gameSlice = createSlice({
       }
     },
 
+    resetGameState: state => {
+      // Reset to initial state
+      Object.assign(state, initialState);
+    },
+
     // Energy Collector Actions
     buyBasicCollector: collectorActions.buyBasicCollector,
     buyQuantumReactor: collectorActions.buyQuantumReactor,
     buyStellarForge: collectorActions.buyStellarForge,
     buyVoidExtractor: collectorActions.buyVoidExtractor,
+    buyDimensionalRift: collectorActions.buyDimensionalRift,
+    buyCosmicGenerator: collectorActions.buyCosmicGenerator,
 
     // Crystal Collector Actions
     buyBasicMine: collectorActions.buyBasicMine,
     buyQuantumDrill: collectorActions.buyQuantumDrill,
     buyStellarExtractor: collectorActions.buyStellarExtractor,
     buyVoidHarvester: collectorActions.buyVoidHarvester,
+    buyDimensionalMine: collectorActions.buyDimensionalMine,
+    buyCosmicRefinery: collectorActions.buyCosmicRefinery,
 
     // Research Facility Actions
     buyResearchLab: researchActions.buyResearchLab,
@@ -195,11 +208,15 @@ export const {
   buyQuantumReactor,
   buyStellarForge,
   buyVoidExtractor,
+  buyDimensionalRift,
+  buyCosmicGenerator,
   // Crystal Collector Actions
   buyBasicMine,
   buyQuantumDrill,
   buyStellarExtractor,
   buyVoidHarvester,
+  buyDimensionalMine,
+  buyCosmicRefinery,
   // Facility Actions
   buyResearchLab,
   buyDataCenter,
@@ -228,6 +245,7 @@ export const {
   unlockAllTabs,
   // Save/Load Actions
   loadGameState,
+  resetGameState,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
