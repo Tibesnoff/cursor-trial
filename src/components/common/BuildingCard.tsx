@@ -10,11 +10,20 @@ interface BuildingCardProps {
 }
 
 const BuildingCard = ({ building, onBuild, onClick }: BuildingCardProps) => {
-    const { quantumEnergy } = useResources();
+    const resources = useResources();
 
     const cost = getBuildingCost(building.baseCost, building.costMultiplier, building.count);
-    const affordable = canAfford(cost, quantumEnergy);
+    const affordable = canAfford(cost, resources);
     const productionText = getResourceProductionText(building.id, building.baseProduction);
+
+    const formatCost = (costObj: typeof cost) => {
+        const costParts = [];
+        if (costObj.quantumEnergy) costParts.push(`${costObj.quantumEnergy.toLocaleString()} ⚡`);
+        if (costObj.quantumCrystals) costParts.push(`${costObj.quantumCrystals.toLocaleString()} 💎`);
+        if (costObj.researchData) costParts.push(`${costObj.researchData.toLocaleString()} 🧪`);
+        if (costObj.defensePoints) costParts.push(`${costObj.defensePoints.toLocaleString()} 🛡️`);
+        return costParts.join(' + ');
+    };
 
     return (
         <Card
@@ -42,8 +51,8 @@ const BuildingCard = ({ building, onBuild, onClick }: BuildingCardProps) => {
                 className="w-full mt-auto"
             >
                 {affordable
-                    ? `Build (${cost.toLocaleString()} ⚡)`
-                    : `Need ${cost.toLocaleString()} ⚡`}
+                    ? `Build (${formatCost(cost)})`
+                    : `Need ${formatCost(cost)}`}
             </Button>
         </Card>
     );

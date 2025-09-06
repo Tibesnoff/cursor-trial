@@ -25,10 +25,8 @@ const GameContainer = () => {
 
     // Play time tracking
     useEffect(() => {
-        const startTime = Date.now();
         const interval = setInterval(() => {
-            const playTime = Math.floor((Date.now() - startTime) / 1000);
-            dispatch(updatePlayTime(playTime));
+            dispatch(updatePlayTime());
         }, 1000);
 
         return () => clearInterval(interval);

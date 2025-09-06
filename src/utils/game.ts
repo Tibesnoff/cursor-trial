@@ -1,18 +1,29 @@
-import type { Building } from '../types';
+import type { Building, BuildingCost } from '../types';
 
 export const getBuildingCost = (
-  baseCost: number,
+  baseCost: BuildingCost,
   multiplier: number,
   count: number
-): number => {
-  return Math.floor(baseCost * Math.pow(multiplier, count));
+): BuildingCost => {
+  const cost: BuildingCost = {};
+  Object.entries(baseCost).forEach(([resource, amount]) => {
+    if (amount) {
+      cost[resource as keyof BuildingCost] = Math.floor(
+        amount * Math.pow(multiplier, count)
+      );
+    }
+  });
+  return cost;
 };
 
 export const canAfford = (
-  cost: number,
-  availableResources: number
+  cost: BuildingCost,
+  availableResources: Record<string, number>
 ): boolean => {
-  return availableResources >= cost;
+  return Object.entries(cost).every(([resource, amount]) => {
+    if (!amount) return true;
+    return (availableResources[resource] || 0) >= amount;
+  });
 };
 
 export const getWorkerBonus = (

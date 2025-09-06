@@ -1,4 +1,4 @@
-import type { BuildingGroup, WorkerType, ResourceType } from '../types';
+import type { WorkerType, ResourceType } from '../types';
 
 export const WORKER_TYPES: WorkerType[] = [
   { key: 'engineers', name: 'Engineers', emoji: '🔧', color: 'blue' },
@@ -37,34 +37,6 @@ export const RESOURCE_TYPES: ResourceType[] = [
     emoji: '🛡️',
     color: 'text-red-300',
     borderColor: 'border-red-400/50',
-  },
-];
-
-export const BUILDING_GROUPS: Omit<BuildingGroup, 'buildings'>[] = [
-  {
-    id: 'energy',
-    name: '⚡ Energy Production',
-    description: 'Buildings that generate quantum energy',
-    color: 'cyan',
-  },
-  {
-    id: 'materials',
-    name: '💎 Material Processing',
-    description: 'Buildings that produce quantum crystals for upgrades',
-    color: 'purple',
-  },
-  {
-    id: 'research',
-    name: '🧪 Research & Development',
-    description:
-      'Buildings that generate research data for advanced technologies',
-    color: 'green',
-  },
-  {
-    id: 'defense',
-    name: '🛡️ Defense Systems',
-    description: 'Buildings that provide defense points for system protection',
-    color: 'red',
   },
 ];
 

@@ -61,12 +61,19 @@ export interface GameState {
   };
 }
 
+export interface BuildingCost {
+  quantumEnergy?: number;
+  quantumCrystals?: number;
+  researchData?: number;
+  defensePoints?: number;
+}
+
 export interface Building {
   id: string;
   name: string;
   description: string;
   emoji: string;
-  baseCost: number;
+  baseCost: BuildingCost;
   costMultiplier: number;
   baseProduction: number;
   count: number;
