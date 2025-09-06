@@ -19,7 +19,7 @@ const BuildingCard = ({ building, onBuild, onClick }: BuildingCardProps) => {
     return (
         <Card
             variant="bordered"
-            className="hover:bg-gray-700/50 transition-all cursor-pointer"
+            className="hover:bg-gray-700/50 transition-all cursor-pointer h-full flex flex-col"
             onClick={onClick}
         >
             <div className="flex items-center space-x-3 mb-3">
@@ -29,7 +29,7 @@ const BuildingCard = ({ building, onBuild, onClick }: BuildingCardProps) => {
                     <p className="text-sm text-gray-300">{productionText}</p>
                 </div>
             </div>
-            <p className="text-xs text-gray-400 mb-3">{building.description}</p>
+            <p className="text-xs text-gray-400 mb-3 flex-grow">{building.description}</p>
             <div className="text-sm text-cyan-400 mb-3">Owned: {building.count}</div>
             <Button
                 onClick={(e?: React.MouseEvent) => {
@@ -39,7 +39,7 @@ const BuildingCard = ({ building, onBuild, onClick }: BuildingCardProps) => {
                 disabled={!affordable}
                 variant={affordable ? 'success' : 'secondary'}
                 size="sm"
-                className="w-full"
+                className="w-full mt-auto"
             >
                 {affordable
                     ? `Build (${cost.toLocaleString()} ⚡)`

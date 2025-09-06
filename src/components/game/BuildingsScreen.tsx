@@ -25,11 +25,6 @@ const BuildingsScreen = () => {
 
     return (
         <div className="space-y-6">
-            <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-2">🏭 Quantum Empire Builder</h2>
-                <p className="text-blue-200">Construct facilities to expand your cosmic dominion</p>
-            </div>
-
             {/* Building Construction Groups */}
             <div className="space-y-8">
                 {buildingGroups.map(group => (
