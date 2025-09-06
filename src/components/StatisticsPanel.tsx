@@ -2,7 +2,7 @@ import { useGameState } from 'src/hooks';
 import { Card } from 'src/components/ui';
 
 const StatisticsPanel = () => {
-    const { statistics, energyCollectors, crystalCollectors, facilities } = useGameState();
+    const { statistics, energyCollectors, crystalCollectors, research, defense } = useGameState();
 
     const formatTime = (seconds: number) => {
         const hours = Math.floor(seconds / 3600);
@@ -48,8 +48,12 @@ const StatisticsPanel = () => {
                             <span className="text-purple-400">{crystalCollectors.basicMines + crystalCollectors.quantumDrills + crystalCollectors.stellarExtractors + crystalCollectors.voidHarvesters}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-300">Total Facilities:</span>
-                            <span className="text-green-400">{Object.values(facilities).reduce((sum, count) => sum + count, 0)}</span>
+                            <span className="text-gray-300">Research Facilities:</span>
+                            <span className="text-green-400">{Object.values(research).reduce((sum, count) => sum + count, 0)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-gray-300">Defense Facilities:</span>
+                            <span className="text-red-400">{Object.values(defense).reduce((sum, count) => sum + count, 0)}</span>
                         </div>
                     </div>
                 </Card>

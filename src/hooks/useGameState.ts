@@ -16,8 +16,16 @@ export const useCrystalCollectors = () => {
   return useAppSelector(state => state.game.crystalCollectors);
 };
 
-export const useFacilities = () => {
-  return useAppSelector(state => state.game.facilities);
+export const useResearch = () => {
+  return useAppSelector(state => state.game.research);
+};
+
+export const useDefense = () => {
+  return useAppSelector(state => state.game.defense);
+};
+
+export const useResearchTree = () => {
+  return useAppSelector(state => state.game.researchTree);
 };
 
 export const useUpgrades = () => {

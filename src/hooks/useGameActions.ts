@@ -26,6 +26,8 @@ import {
   upgradeCollectorEfficiency,
   upgradeCrystalClickPower,
   upgradeCrystalEfficiency,
+  unlockResearchNode,
+  completeResearchNode,
 } from '../store/slices/gameSlice';
 
 export const useGameActions = () => {
@@ -63,5 +65,10 @@ export const useGameActions = () => {
     upgradeCollectorEfficiency: () => dispatch(upgradeCollectorEfficiency()),
     upgradeCrystalClickPower: () => dispatch(upgradeCrystalClickPower()),
     upgradeCrystalEfficiency: () => dispatch(upgradeCrystalEfficiency()),
+
+    unlockResearchNode: (nodeId: string) =>
+      dispatch(unlockResearchNode(nodeId)),
+    completeResearchNode: (nodeId: string) =>
+      dispatch(completeResearchNode(nodeId)),
   };
 };

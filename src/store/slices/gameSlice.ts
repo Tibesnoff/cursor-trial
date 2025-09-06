@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { GameState } from '../../types';
 import * as collectorActions from '../actions/collectorActions';
-import * as facilityActions from '../actions/facilityActions';
+import * as researchActions from '../actions/researchActions';
+import * as defenseActions from '../actions/defenseActions';
 import * as upgradeActions from '../actions/upgradeActions';
 import {
   generatePassiveEnergy as generatePassiveEnergyLogic,
@@ -30,14 +31,15 @@ const initialState: GameState = {
     stellarExtractors: 0,
     voidHarvesters: 0,
   },
-  // Facilities (buildings) - now more expensive and expanded
-  facilities: {
-    // Research Facilities
+  // Research Facilities (generate research data)
+  research: {
     researchLabs: 0,
     dataCenters: 0,
     quantumComputers: 0,
     neuralNetworks: 0,
-    // Defense Infrastructure
+  },
+  // Defense Infrastructure (generate defense points)
+  defense: {
     powerGrids: 0,
     transportHubs: 0,
     defenseSystems: 0,
@@ -48,6 +50,10 @@ const initialState: GameState = {
     collectorEfficiency: 1,
     crystalClickPower: 1,
     crystalEfficiency: 1,
+  },
+  researchTree: {
+    unlocked: ['basic_research'],
+    completed: [],
   },
   achievements: [],
   statistics: {
@@ -105,21 +111,27 @@ const gameSlice = createSlice({
     buyStellarExtractor: collectorActions.buyStellarExtractor,
     buyVoidHarvester: collectorActions.buyVoidHarvester,
 
-    // Facility Actions
-    buyResearchLab: facilityActions.buyResearchLab,
-    buyDataCenter: facilityActions.buyDataCenter,
-    buyQuantumComputer: facilityActions.buyQuantumComputer,
-    buyNeuralNetwork: facilityActions.buyNeuralNetwork,
-    buyPowerGrid: facilityActions.buyPowerGrid,
-    buyTransportHub: facilityActions.buyTransportHub,
-    buyDefenseSystem: facilityActions.buyDefenseSystem,
-    buyCommunicationArray: facilityActions.buyCommunicationArray,
+    // Research Facility Actions
+    buyResearchLab: researchActions.buyResearchLab,
+    buyDataCenter: researchActions.buyDataCenter,
+    buyQuantumComputer: researchActions.buyQuantumComputer,
+    buyNeuralNetwork: researchActions.buyNeuralNetwork,
+
+    // Defense Facility Actions
+    buyPowerGrid: defenseActions.buyPowerGrid,
+    buyTransportHub: defenseActions.buyTransportHub,
+    buyDefenseSystem: defenseActions.buyDefenseSystem,
+    buyCommunicationArray: defenseActions.buyCommunicationArray,
 
     // Upgrade Actions
     upgradeClickPower: upgradeActions.upgradeClickPower,
     upgradeCollectorEfficiency: upgradeActions.upgradeCollectorEfficiency,
     upgradeCrystalClickPower: upgradeActions.upgradeCrystalClickPower,
     upgradeCrystalEfficiency: upgradeActions.upgradeCrystalEfficiency,
+
+    // Research Actions
+    unlockResearchNode: researchActions.unlockResearchNode,
+    completeResearchNode: researchActions.completeResearchNode,
 
     // Game Logic Actions
     generatePassiveEnergy: generatePassiveEnergyLogic,
@@ -156,6 +168,9 @@ export const {
   upgradeCollectorEfficiency,
   upgradeCrystalClickPower,
   upgradeCrystalEfficiency,
+  // Research Actions
+  unlockResearchNode,
+  completeResearchNode,
   // Game Logic Actions
   generatePassiveEnergy,
   generateEnergyFromCollectors,

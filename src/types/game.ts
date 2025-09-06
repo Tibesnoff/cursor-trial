@@ -19,14 +19,15 @@ export interface GameState {
     stellarExtractors: number;
     voidHarvesters: number;
   };
-  // Facilities (buildings) - now more expensive and expanded
-  facilities: {
-    // Research Facilities
+  // Research Facilities (generate research data)
+  research: {
     researchLabs: number;
     dataCenters: number;
     quantumComputers: number;
     neuralNetworks: number;
-    // Defense Infrastructure
+  };
+  // Defense Infrastructure (generate defense points)
+  defense: {
     powerGrids: number;
     transportHubs: number;
     defenseSystems: number;
@@ -37,6 +38,10 @@ export interface GameState {
     collectorEfficiency: number;
     crystalClickPower: number;
     crystalEfficiency: number;
+  };
+  researchTree: {
+    unlocked: string[];
+    completed: string[];
   };
   achievements: string[];
   statistics: {
@@ -102,4 +107,42 @@ export interface FacilityConfig {
   costMultiplier: number;
   baseProduction: number;
   category: 'material' | 'research' | 'defense';
+}
+
+export interface ResearchNode {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  cost: {
+    researchData: number;
+    quantumEnergy?: number;
+    quantumCrystals?: number;
+    defensePoints?: number;
+  };
+  prerequisites: string[];
+  effects: {
+    type: 'energy' | 'crystal' | 'defense' | 'ship' | 'unlock';
+    value: number;
+    description: string;
+  }[];
+  category: 'energy' | 'crystal' | 'defense' | 'ship' | 'foundation';
+}
+
+export interface DefenseUpgrade {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  cost: {
+    defensePoints: number;
+    quantumEnergy?: number;
+    quantumCrystals?: number;
+  };
+  effects: {
+    type: 'shield' | 'weapon' | 'detection' | 'ship' | 'unlock';
+    value: number;
+    description: string;
+  }[];
+  category: 'infrastructure' | 'weapons' | 'shields' | 'ships' | 'intelligence';
 }

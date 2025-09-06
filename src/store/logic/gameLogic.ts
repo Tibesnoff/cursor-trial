@@ -1,76 +1,24 @@
 import type { GameState } from 'src/types';
 
 export const generatePassiveEnergy = (state: GameState) => {
-  const { facilities } = state;
+  const { research, defense } = state;
 
-  // Calculate production from facilities only
-  const facilityConfigs = [
-    // Research Facilities
-    {
-      type: 'researchLabs',
-      baseProduction: 3,
-      category: 'research',
-    },
-    {
-      type: 'dataCenters',
-      baseProduction: 15,
-      category: 'research',
-    },
-    {
-      type: 'quantumComputers',
-      baseProduction: 75,
-      category: 'research',
-    },
-    {
-      type: 'neuralNetworks',
-      baseProduction: 375,
-      category: 'research',
-    },
+  // Calculate research data production
+  const researchProduction =
+    research.researchLabs * 3 +
+    research.dataCenters * 15 +
+    research.quantumComputers * 75 +
+    research.neuralNetworks * 375;
 
-    // Defense Facilities
-    {
-      type: 'powerGrids',
-      baseProduction: 1,
-      category: 'defense',
-    },
-    {
-      type: 'transportHubs',
-      baseProduction: 5,
-      category: 'defense',
-    },
-    {
-      type: 'defenseSystems',
-      baseProduction: 25,
-      category: 'defense',
-    },
-    {
-      type: 'communicationArrays',
-      baseProduction: 125,
-      category: 'defense',
-    },
-  ];
+  // Calculate defense points production
+  const defenseProduction =
+    defense.powerGrids * 1 +
+    defense.transportHubs * 5 +
+    defense.defenseSystems * 25 +
+    defense.communicationArrays * 125;
 
-  let totalResearchProduction = 0;
-  let totalDefenseProduction = 0;
-
-  facilityConfigs.forEach(config => {
-    const facilityCount =
-      facilities[config.type as keyof typeof facilities] || 0;
-    if (facilityCount > 0) {
-      const production = config.baseProduction * facilityCount;
-
-      // Categorize production by facility type
-      if (config.category === 'research') {
-        totalResearchProduction += production;
-      } else if (config.category === 'defense') {
-        totalDefenseProduction += production;
-      }
-    }
-  });
-
-  // Add resources (no energy or crystal production from facilities)
-  state.resources.researchData += totalResearchProduction;
-  state.resources.defensePoints += totalDefenseProduction;
+  state.resources.researchData += researchProduction;
+  state.resources.defensePoints += defenseProduction;
 };
 
 export const generateEnergyFromCollectors = (state: GameState) => {

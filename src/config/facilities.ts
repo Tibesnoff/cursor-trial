@@ -6,7 +6,7 @@ export const RESEARCH_FACILITIES: FacilityConfig[] = [
   {
     id: 'researchLabs',
     name: 'Research Lab',
-    description: 'Basic research facility for quantum studies',
+    description: 'Generates basic research data for the research tree',
     emoji: '🧪',
     baseCost: { quantumEnergy: 500, quantumCrystals: 25 },
     costMultiplier: 1.3,
@@ -16,7 +16,7 @@ export const RESEARCH_FACILITIES: FacilityConfig[] = [
   {
     id: 'dataCenters',
     name: 'Data Center',
-    description: 'Processes vast amounts of quantum information',
+    description: 'Processes vast amounts of information for research',
     emoji: '💻',
     baseCost: { quantumEnergy: 2500, quantumCrystals: 125, researchData: 50 },
     costMultiplier: 1.4,
@@ -53,7 +53,7 @@ export const DEFENSE_FACILITIES: FacilityConfig[] = [
   {
     id: 'powerGrids',
     name: 'Power Grid',
-    description: 'Basic defense infrastructure',
+    description: 'Provides energy to defense systems',
     emoji: '⚡',
     baseCost: { quantumEnergy: 200, quantumCrystals: 10 },
     costMultiplier: 1.2,
@@ -63,7 +63,7 @@ export const DEFENSE_FACILITIES: FacilityConfig[] = [
   {
     id: 'transportHubs',
     name: 'Transport Hub',
-    description: 'Enables instant transportation across dimensions',
+    description: 'Facilitates rapid deployment of defense units',
     emoji: '🚀',
     baseCost: { quantumEnergy: 1000, quantumCrystals: 50, researchData: 25 },
     costMultiplier: 1.3,
@@ -73,7 +73,7 @@ export const DEFENSE_FACILITIES: FacilityConfig[] = [
   {
     id: 'defenseSystems',
     name: 'Defense System',
-    description: 'Protects your empire from cosmic threats',
+    description: 'Automated turrets and shields for planetary defense',
     emoji: '🛡️',
     baseCost: { quantumEnergy: 5000, quantumCrystals: 250, researchData: 125 },
     costMultiplier: 1.4,
