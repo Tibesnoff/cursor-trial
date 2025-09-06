@@ -1,4 +1,4 @@
-import type { Building, BuildingCost } from '../types';
+import type { BuildingCost } from '../types';
 
 export const getBuildingCost = (
   baseCost: BuildingCost,
@@ -24,20 +24,6 @@ export const canAfford = (
     if (!amount) return true;
     return (availableResources[resource] || 0) >= amount;
   });
-};
-
-export const getWorkerBonus = (
-  recommendations: Building['recommendedWorkers'],
-  currentWorkers: Record<string, number>
-): number => {
-  let bonus = 1;
-  Object.entries(recommendations).forEach(([workerType, recommended]) => {
-    if (!recommended) return;
-    const current = currentWorkers[workerType] || 0;
-    const ratio = Math.min(current / recommended, 1);
-    bonus += ratio * 0.5; // 50% bonus per fully staffed recommendation
-  });
-  return bonus;
 };
 
 export const formatNumber = (num: number): string => {

@@ -12,10 +12,6 @@ export const useBuildings = () => {
   return useAppSelector(state => state.game.buildings);
 };
 
-export const useWorkers = () => {
-  return useAppSelector(state => state.game.workers);
-};
-
 export const useUpgrades = () => {
   return useAppSelector(state => state.game.upgrades);
 };

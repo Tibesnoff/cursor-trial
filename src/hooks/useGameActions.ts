@@ -17,12 +17,6 @@ import {
   buyTransportHub,
   buyDefenseSystem,
   buyCommunicationArray,
-  hireEngineer,
-  hireScientist,
-  hireTechnician,
-  hireOperator,
-  hireResearcher,
-  hireArchitect,
   upgradeClickPower,
   upgradeCollectorEfficiency,
 } from '../store/slices/gameSlice';
@@ -51,14 +45,6 @@ export const useGameActions = () => {
     buyTransportHub: () => dispatch(buyTransportHub()),
     buyDefenseSystem: () => dispatch(buyDefenseSystem()),
     buyCommunicationArray: () => dispatch(buyCommunicationArray()),
-
-    // Worker hire actions
-    hireEngineer: () => dispatch(hireEngineer()),
-    hireScientist: () => dispatch(hireScientist()),
-    hireTechnician: () => dispatch(hireTechnician()),
-    hireOperator: () => dispatch(hireOperator()),
-    hireResearcher: () => dispatch(hireResearcher()),
-    hireArchitect: () => dispatch(hireArchitect()),
 
     // Upgrade actions
     upgradeClickPower: () => dispatch(upgradeClickPower()),

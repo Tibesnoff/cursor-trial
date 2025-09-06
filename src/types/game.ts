@@ -1,17 +1,3 @@
-export interface BuildingInstance {
-  id: string;
-  type: string;
-  level: number;
-  assignedWorkers: {
-    engineers: number;
-    scientists: number;
-    technicians: number;
-    operators: number;
-    researchers: number;
-    architects: number;
-  };
-}
-
 export interface GameState {
   resources: {
     quantumEnergy: number;
@@ -40,14 +26,6 @@ export interface GameState {
     transportHubs: number;
     defenseSystems: number;
     communicationArrays: number;
-  };
-  workers: {
-    engineers: number;
-    scientists: number;
-    technicians: number;
-    operators: number;
-    researchers: number;
-    architects: number;
   };
   upgrades: {
     clickPower: number;
@@ -78,14 +56,6 @@ export interface Building {
   baseProduction: number;
   count: number;
   action: () => void;
-  recommendedWorkers: {
-    engineers?: number;
-    scientists?: number;
-    technicians?: number;
-    operators?: number;
-    researchers?: number;
-    architects?: number;
-  };
 }
 
 export interface BuildingGroup {
@@ -94,13 +64,6 @@ export interface BuildingGroup {
   description: string;
   color: string;
   buildings: Building[];
-}
-
-export interface WorkerType {
-  key: keyof BuildingInstance['assignedWorkers'];
-  name: string;
-  emoji: string;
-  color: string;
 }
 
 export interface ResourceType {

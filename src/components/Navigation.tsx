@@ -7,7 +7,6 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
     const tabs = [
         { id: 'clicker', name: 'Quantum Collector', emoji: '⚡' },
         { id: 'buildings', name: 'Facilities', emoji: '🏭' },
-        { id: 'workers', name: 'Personnel', emoji: '👥' },
         { id: 'stats', name: 'Analytics', emoji: '📊' },
     ];
 

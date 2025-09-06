@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { GameState } from '../../types';
 import * as buildingActions from '../actions/buildingActions';
-import * as workerActions from '../actions/workerActions';
 import * as upgradeActions from '../actions/upgradeActions';
 import {
   generatePassiveEnergy as generatePassiveEnergyLogic,
+  generateEnergyFromCollectors as generateEnergyFromCollectorsLogic,
   updatePlayTime as updatePlayTimeLogic,
 } from '../logic/gameLogic';
 
@@ -32,14 +32,6 @@ const initialState: GameState = {
     transportHubs: 0,
     defenseSystems: 0,
     communicationArrays: 0,
-  },
-  workers: {
-    engineers: 0,
-    scientists: 0,
-    technicians: 0,
-    operators: 0,
-    researchers: 0,
-    architects: 0,
   },
   upgrades: {
     clickPower: 1,
@@ -83,20 +75,13 @@ const gameSlice = createSlice({
     buyDefenseSystem: buildingActions.buyDefenseSystem,
     buyCommunicationArray: buildingActions.buyCommunicationArray,
 
-    // Worker Actions
-    hireEngineer: workerActions.hireEngineer,
-    hireTechnician: workerActions.hireTechnician,
-    hireScientist: workerActions.hireScientist,
-    hireOperator: workerActions.hireOperator,
-    hireResearcher: workerActions.hireResearcher,
-    hireArchitect: workerActions.hireArchitect,
-
     // Upgrade Actions
     upgradeClickPower: upgradeActions.upgradeClickPower,
     upgradeCollectorEfficiency: upgradeActions.upgradeCollectorEfficiency,
 
     // Game Logic Actions
     generatePassiveEnergy: generatePassiveEnergyLogic,
+    generateEnergyFromCollectors: generateEnergyFromCollectorsLogic,
     updatePlayTime: updatePlayTimeLogic,
   },
 });
@@ -120,15 +105,10 @@ export const {
   buyTransportHub,
   buyDefenseSystem,
   buyCommunicationArray,
-  hireEngineer,
-  hireTechnician,
-  hireScientist,
-  hireOperator,
-  hireResearcher,
-  hireArchitect,
   upgradeClickPower,
   upgradeCollectorEfficiency,
   generatePassiveEnergy,
+  generateEnergyFromCollectors,
   updatePlayTime,
 } = gameSlice.actions;
 

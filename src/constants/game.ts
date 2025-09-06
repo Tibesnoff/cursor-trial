@@ -1,13 +1,4 @@
-import type { WorkerType, ResourceType } from '../types';
-
-export const WORKER_TYPES: WorkerType[] = [
-  { key: 'engineers', name: 'Engineers', emoji: '🔧', color: 'blue' },
-  { key: 'technicians', name: 'Technicians', emoji: '⚙️', color: 'green' },
-  { key: 'scientists', name: 'Scientists', emoji: '🧪', color: 'purple' },
-  { key: 'operators', name: 'Operators', emoji: '🎛️', color: 'yellow' },
-  { key: 'researchers', name: 'Researchers', emoji: '🔬', color: 'cyan' },
-  { key: 'architects', name: 'Architects', emoji: '🏗️', color: 'orange' },
-];
+import type { ResourceType } from '../types';
 
 export const RESOURCE_TYPES: ResourceType[] = [
   {
@@ -43,9 +34,4 @@ export const RESOURCE_TYPES: ResourceType[] = [
 export const GAME_CONFIG = {
   PASSIVE_GENERATION_INTERVAL: 1000, // 1 second
   PLAY_TIME_UPDATE_INTERVAL: 1000, // 1 second
-  WORKER_BONUS_PER_RECOMMENDATION: 0.5, // 50% bonus per fully staffed recommendation
-  GLOBAL_ENGINEER_BONUS: 0.05, // 5% per engineer
-  GLOBAL_TECHNICIAN_BONUS: 0.03, // 3% per technician
-  GLOBAL_OPERATOR_BONUS: 0.08, // 8% per operator
-  GLOBAL_RESEARCHER_BONUS: 0.1, // 10% per researcher
 } as const;

@@ -2,7 +2,7 @@ import { useGameState } from 'src/hooks';
 import { Card } from 'src/components/ui';
 
 const StatisticsPanel = () => {
-    const { statistics, buildings, workers } = useGameState();
+    const { statistics, buildings } = useGameState();
 
     const formatTime = (seconds: number) => {
         const hours = Math.floor(seconds / 3600);
@@ -70,36 +70,6 @@ const StatisticsPanel = () => {
                     </div>
                 </Card>
 
-                {/* Worker Counts */}
-                <Card variant="bordered" padding="md">
-                    <h3 className="text-lg font-semibold text-white mb-4">Workers</h3>
-                    <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Engineers:</span>
-                            <span className="text-green-400">{workers.engineers}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Scientists:</span>
-                            <span className="text-green-400">{workers.scientists}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Technicians:</span>
-                            <span className="text-green-400">{workers.technicians}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Operators:</span>
-                            <span className="text-green-400">{workers.operators}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Researchers:</span>
-                            <span className="text-green-400">{workers.researchers}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Architects:</span>
-                            <span className="text-green-400">{workers.architects}</span>
-                        </div>
-                    </div>
-                </Card>
             </div>
         </div>
     );
