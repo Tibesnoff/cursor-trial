@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch } from 'src/store/hooks';
 import {
     generatePassiveEnergy,
     updatePlayTime,
-} from '../store/slices/gameSlice';
-import Header from './Header';
-import Navigation from './Navigation';
-import MainClicker from './MainClicker';
-import BuildingsScreen from './BuildingsScreen';
-import WorkersScreen from './WorkersScreen';
-import StatisticsPanel from './StatisticsPanel';
+} from 'src/store/slices/gameSlice';
+import { Header, BuildingsScreen } from 'src/components/game';
+import Navigation from 'src/components/Navigation';
+import MainClicker from 'src/components/MainClicker';
+import WorkersScreen from 'src/components/WorkersScreen';
+import StatisticsPanel from 'src/components/StatisticsPanel';
 
 const GameContainer = () => {
     const dispatch = useAppDispatch();

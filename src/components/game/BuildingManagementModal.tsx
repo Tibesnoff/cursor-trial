@@ -9,7 +9,8 @@ interface BuildingManagementModalProps {
 }
 
 const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingManagementModalProps) => {
-    const { buildings, workers, resources } = useGameState();
+    const { resources, workers, buildings } = useGameState();
+    const { quantumEnergy } = resources;
     const actions = useGameActions();
 
     if (!isOpen) return null;
@@ -17,34 +18,8 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
     const buildingInfo = getBuildingInfo(buildingType);
     const buildingCount = buildings[buildingType as keyof typeof buildings] || 0;
     const upgradeCost = Math.floor(100 * Math.pow(2, buildingCount - 1));
-    const canUpgrade = resources.quantumEnergy >= upgradeCost;
+    const canUpgrade = quantumEnergy >= upgradeCost;
 
-    const handleUpgrade = () => {
-        // For now, we'll use the existing building purchase action as an upgrade
-        const actionMap: Record<string, () => void> = {
-            basicCollectors: actions.buyBasicCollector,
-            quantumReactors: actions.buyQuantumReactor,
-            stellarForges: actions.buyStellarForge,
-            voidExtractors: actions.buyVoidExtractor,
-            crystalMines: actions.buyCrystalMine,
-            quantumRefineries: actions.buyQuantumRefinery,
-            matterSynthesizers: actions.buyMatterSynthesizer,
-            dimensionalExtractors: actions.buyDimensionalExtractor,
-            researchLabs: actions.buyResearchLab,
-            dataCenters: actions.buyDataCenter,
-            quantumComputers: actions.buyQuantumComputer,
-            neuralNetworks: actions.buyNeuralNetwork,
-            powerGrids: actions.buyPowerGrid,
-            transportHubs: actions.buyTransportHub,
-            defenseSystems: actions.buyDefenseSystem,
-            communicationArrays: actions.buyCommunicationArray,
-        };
-
-        const action = actionMap[buildingType];
-        if (action) {
-            action();
-        }
-    };
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -83,13 +58,9 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
                                 <div className="text-xl text-green-400 font-mono">{buildingInfo.baseProduction * buildingCount} energy/sec</div>
                             </div>
                         </div>
-                        <div className="mt-4">
-                            <div className="text-sm text-gray-400">Buildings Owned</div>
-                            <div className="text-lg text-cyan-400 font-mono">{buildingCount}</div>
-                        </div>
                     </Card>
 
-                    {/* Worker Assignment */}
+                    {/* Recommended Workers */}
                     <Card variant="bordered" padding="md">
                         <h3 className="text-lg font-semibold text-white mb-3">👥 Recommended Workers</h3>
                         <div className="space-y-3">
@@ -128,7 +99,31 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
                                 </div>
                             </div>
                             <Button
-                                onClick={handleUpgrade}
+                                onClick={() => {
+                                    const actionMap: Record<string, () => void> = {
+                                        basicCollectors: actions.buyBasicCollector,
+                                        quantumReactors: actions.buyQuantumReactor,
+                                        stellarForges: actions.buyStellarForge,
+                                        voidExtractors: actions.buyVoidExtractor,
+                                        crystalMines: actions.buyCrystalMine,
+                                        quantumRefineries: actions.buyQuantumRefinery,
+                                        matterSynthesizers: actions.buyMatterSynthesizer,
+                                        dimensionalExtractors: actions.buyDimensionalExtractor,
+                                        researchLabs: actions.buyResearchLab,
+                                        dataCenters: actions.buyDataCenter,
+                                        quantumComputers: actions.buyQuantumComputer,
+                                        neuralNetworks: actions.buyNeuralNetwork,
+                                        powerGrids: actions.buyPowerGrid,
+                                        transportHubs: actions.buyTransportHub,
+                                        defenseSystems: actions.buyDefenseSystem,
+                                        communicationArrays: actions.buyCommunicationArray,
+                                    };
+
+                                    const action = actionMap[buildingType];
+                                    if (action) {
+                                        action();
+                                    }
+                                }}
                                 disabled={!canUpgrade}
                                 variant={canUpgrade ? 'primary' : 'secondary'}
                                 size="md"
@@ -148,112 +143,27 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
 function getBuildingInfo(type: string) {
     const buildingTypes = {
         // Energy Buildings
-        basicCollectors: {
-            name: 'Basic Collector',
-            emoji: '⚡',
-            baseProduction: 1,
-            recommendedWorkers: {}
-        },
-        quantumReactors: {
-            name: 'Quantum Reactor',
-            emoji: '🔬',
-            baseProduction: 5,
-            recommendedWorkers: { engineers: 1 }
-        },
-        stellarForges: {
-            name: 'Stellar Forge',
-            emoji: '⭐',
-            baseProduction: 500,
-            recommendedWorkers: { researchers: 1, architects: 1, engineers: 5 }
-        },
-        voidExtractors: {
-            name: 'Void Extractor',
-            emoji: '🌀',
-            baseProduction: 2500,
-            recommendedWorkers: { researchers: 2, architects: 2, scientists: 2, operators: 3 }
-        },
+        basicCollectors: { name: 'Basic Collector', emoji: '⚡', baseProduction: 1, recommendedWorkers: {} },
+        quantumReactors: { name: 'Quantum Reactor', emoji: '🔬', baseProduction: 5, recommendedWorkers: { engineers: 1 } },
+        stellarForges: { name: 'Stellar Forge', emoji: '⭐', baseProduction: 500, recommendedWorkers: { researchers: 1, architects: 1, engineers: 5 } },
+        voidExtractors: { name: 'Void Extractor', emoji: '🌀', baseProduction: 2500, recommendedWorkers: { researchers: 2, architects: 2, scientists: 2, operators: 3 } },
         // Material Buildings
-        crystalMines: {
-            name: 'Crystal Mine',
-            emoji: '💎',
-            baseProduction: 2,
-            recommendedWorkers: { engineers: 1, technicians: 1 }
-        },
-        quantumRefineries: {
-            name: 'Quantum Refinery',
-            emoji: '⚗️',
-            baseProduction: 10,
-            recommendedWorkers: { scientists: 1, engineers: 2 }
-        },
-        matterSynthesizers: {
-            name: 'Matter Synthesizer',
-            emoji: '🔮',
-            baseProduction: 50,
-            recommendedWorkers: { researchers: 1, scientists: 2, engineers: 1 }
-        },
-        dimensionalExtractors: {
-            name: 'Dimensional Extractor',
-            emoji: '🌌',
-            baseProduction: 250,
-            recommendedWorkers: { researchers: 2, architects: 1, scientists: 1 }
-        },
+        crystalMines: { name: 'Crystal Mine', emoji: '💎', baseProduction: 2, recommendedWorkers: { engineers: 1, technicians: 1 } },
+        quantumRefineries: { name: 'Quantum Refinery', emoji: '⚗️', baseProduction: 10, recommendedWorkers: { scientists: 1, engineers: 2 } },
+        matterSynthesizers: { name: 'Matter Synthesizer', emoji: '🔮', baseProduction: 50, recommendedWorkers: { researchers: 1, scientists: 2, engineers: 1 } },
+        dimensionalExtractors: { name: 'Dimensional Extractor', emoji: '🌌', baseProduction: 250, recommendedWorkers: { researchers: 2, architects: 1, scientists: 1 } },
         // Research Buildings
-        researchLabs: {
-            name: 'Research Lab',
-            emoji: '🧪',
-            baseProduction: 3,
-            recommendedWorkers: { scientists: 1, researchers: 1 }
-        },
-        dataCenters: {
-            name: 'Data Center',
-            emoji: '💻',
-            baseProduction: 15,
-            recommendedWorkers: { technicians: 2, operators: 1 }
-        },
-        quantumComputers: {
-            name: 'Quantum Computer',
-            emoji: '🖥️',
-            baseProduction: 75,
-            recommendedWorkers: { researchers: 2, scientists: 1, engineers: 1 }
-        },
-        neuralNetworks: {
-            name: 'Neural Network',
-            emoji: '🧠',
-            baseProduction: 375,
-            recommendedWorkers: { researchers: 3, architects: 1, scientists: 2 }
-        },
+        researchLabs: { name: 'Research Lab', emoji: '🧪', baseProduction: 3, recommendedWorkers: { scientists: 1, researchers: 1 } },
+        dataCenters: { name: 'Data Center', emoji: '💻', baseProduction: 15, recommendedWorkers: { technicians: 2, operators: 1 } },
+        quantumComputers: { name: 'Quantum Computer', emoji: '🖥️', baseProduction: 75, recommendedWorkers: { researchers: 2, scientists: 1, engineers: 1 } },
+        neuralNetworks: { name: 'Neural Network', emoji: '🧠', baseProduction: 375, recommendedWorkers: { researchers: 3, architects: 1, scientists: 2 } },
         // Defense Buildings
-        powerGrids: {
-            name: 'Power Grid',
-            emoji: '⚡',
-            baseProduction: 1,
-            recommendedWorkers: { engineers: 1, technicians: 1 }
-        },
-        transportHubs: {
-            name: 'Transport Hub',
-            emoji: '🚀',
-            baseProduction: 5,
-            recommendedWorkers: { operators: 2, engineers: 1 }
-        },
-        defenseSystems: {
-            name: 'Defense System',
-            emoji: '🛡️',
-            baseProduction: 25,
-            recommendedWorkers: { engineers: 2, technicians: 1, operators: 1 }
-        },
-        communicationArrays: {
-            name: 'Communication Array',
-            emoji: '📡',
-            baseProduction: 125,
-            recommendedWorkers: { architects: 1, engineers: 2, operators: 2 }
-        },
+        powerGrids: { name: 'Power Grid', emoji: '⚡', baseProduction: 1, recommendedWorkers: { engineers: 1, technicians: 1 } },
+        transportHubs: { name: 'Transport Hub', emoji: '🚀', baseProduction: 5, recommendedWorkers: { operators: 2, engineers: 1 } },
+        defenseSystems: { name: 'Defense System', emoji: '🛡️', baseProduction: 25, recommendedWorkers: { engineers: 2, technicians: 1, operators: 1 } },
+        communicationArrays: { name: 'Communication Array', emoji: '📡', baseProduction: 125, recommendedWorkers: { architects: 1, engineers: 2, operators: 2 } },
     };
-    return buildingTypes[type as keyof typeof buildingTypes] || {
-        name: 'Unknown',
-        emoji: '❓',
-        baseProduction: 1,
-        recommendedWorkers: {}
-    };
+    return buildingTypes[type as keyof typeof buildingTypes] || { name: 'Unknown', emoji: '❓', baseProduction: 1, recommendedWorkers: {} };
 }
 
 export default BuildingManagementModal;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGameState, useGameActions } from 'src/hooks';
 import { BUILDING_GROUPS } from 'src/constants';
 import { BuildingCard } from 'src/components/common';
-import BuildingManagementModal from 'src/components/BuildingManagementModal';
+import BuildingManagementModal from 'src/components/game/BuildingManagementModal';
 
 const BuildingsScreen = () => {
     const { buildings } = useGameState();
@@ -11,10 +11,6 @@ const BuildingsScreen = () => {
     const [selectedBuildingType, setSelectedBuildingType] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleBuildingClick = (buildingType: string) => {
-        setSelectedBuildingType(buildingType);
-        setIsModalOpen(true);
-    };
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -48,13 +44,18 @@ const BuildingsScreen = () => {
                                     key={building.id}
                                     building={building}
                                     onBuild={building.action}
-                                    onClick={() => handleBuildingClick(building.id)}
+                                    onClick={() => {
+                                        setSelectedBuildingType(building.id);
+                                        setIsModalOpen(true);
+                                    }}
                                 />
                             ))}
                         </div>
                     </div>
                 ))}
             </div>
+
+            {/* Building Instances */}
 
             {/* Modal */}
             {selectedBuildingType && (
@@ -69,7 +70,7 @@ const BuildingsScreen = () => {
 };
 
 // Helper functions
-function getBuildingsForGroup(groupId: string, buildings: Record<string, number>, actions: any): any[] {
+function getBuildingsForGroup(groupId: string, buildings: any, actions: any) {
     const buildingConfigs = {
         energy: [
             {
