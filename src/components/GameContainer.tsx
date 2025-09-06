@@ -5,7 +5,7 @@ import {
     generateEnergyFromCollectors,
     updatePlayTime,
 } from 'src/store/slices/gameSlice';
-import { Header, BuildingsScreen, QuantumCollectorScreen } from 'src/components/game';
+import { Header, BuildingsScreen, QuantumCollectorScreen, CrystalMineScreen } from 'src/components/game';
 import Navigation from 'src/components/Navigation';
 import StatisticsPanel from 'src/components/StatisticsPanel';
 
@@ -44,7 +44,9 @@ const GameContainer = () => {
         switch (activeTab) {
             case 'clicker':
                 return <QuantumCollectorScreen />;
-            case 'buildings':
+            case 'crystals':
+                return <CrystalMineScreen />;
+            case 'facilities':
                 return <BuildingsScreen />;
             case 'stats':
                 return <StatisticsPanel />;

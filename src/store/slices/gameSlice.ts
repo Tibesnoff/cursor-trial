@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { GameState } from '../../types';
-import * as buildingActions from '../actions/buildingActions';
+import * as collectorActions from '../actions/collectorActions';
+import * as facilityActions from '../actions/facilityActions';
 import * as upgradeActions from '../actions/upgradeActions';
 import {
   generatePassiveEnergy as generatePassiveEnergyLogic,
@@ -15,19 +16,28 @@ const initialState: GameState = {
     researchData: 0,
     defensePoints: 0,
   },
-  buildings: {
+  // Energy Collectors (now modifiers/upgrades)
+  energyCollectors: {
     basicCollectors: 0,
     quantumReactors: 0,
     stellarForges: 0,
     voidExtractors: 0,
-    crystalMines: 0,
-    quantumRefineries: 0,
-    matterSynthesizers: 0,
-    dimensionalExtractors: 0,
+  },
+  // Crystal Collectors (new system)
+  crystalCollectors: {
+    basicMines: 0,
+    quantumDrills: 0,
+    stellarExtractors: 0,
+    voidHarvesters: 0,
+  },
+  // Facilities (buildings) - now more expensive and expanded
+  facilities: {
+    // Research Facilities
     researchLabs: 0,
     dataCenters: 0,
     quantumComputers: 0,
     neuralNetworks: 0,
+    // Defense Infrastructure
     powerGrids: 0,
     transportHubs: 0,
     defenseSystems: 0,
@@ -36,11 +46,14 @@ const initialState: GameState = {
   upgrades: {
     clickPower: 1,
     collectorEfficiency: 1,
+    crystalClickPower: 1,
+    crystalEfficiency: 1,
   },
   achievements: [],
   statistics: {
     totalClicks: 0,
     totalEnergyEarned: 0,
+    totalCrystalsEarned: 0,
     playTime: 0,
   },
 };
@@ -50,34 +63,63 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     // Core Actions
-    click: state => {
-      const energyGained = state.upgrades.clickPower;
+    clickEnergy: state => {
+      // Calculate energy gained from click power + collectors
+      let energyGained = state.upgrades.clickPower;
+
+      // Add energy collector click power bonuses
+      energyGained += state.energyCollectors.basicCollectors * 1;
+      energyGained += state.energyCollectors.quantumReactors * 2;
+      energyGained += state.energyCollectors.stellarForges * 5;
+      energyGained += state.energyCollectors.voidExtractors * 10;
+
       state.resources.quantumEnergy += energyGained;
       state.statistics.totalClicks += 1;
       state.statistics.totalEnergyEarned += energyGained;
     },
 
-    // Building Actions
-    buyBasicCollector: buildingActions.buyBasicCollector,
-    buyQuantumReactor: buildingActions.buyQuantumReactor,
-    buyStellarForge: buildingActions.buyStellarForge,
-    buyVoidExtractor: buildingActions.buyVoidExtractor,
-    buyCrystalMine: buildingActions.buyCrystalMine,
-    buyQuantumRefinery: buildingActions.buyQuantumRefinery,
-    buyMatterSynthesizer: buildingActions.buyMatterSynthesizer,
-    buyDimensionalExtractor: buildingActions.buyDimensionalExtractor,
-    buyResearchLab: buildingActions.buyResearchLab,
-    buyDataCenter: buildingActions.buyDataCenter,
-    buyQuantumComputer: buildingActions.buyQuantumComputer,
-    buyNeuralNetwork: buildingActions.buyNeuralNetwork,
-    buyPowerGrid: buildingActions.buyPowerGrid,
-    buyTransportHub: buildingActions.buyTransportHub,
-    buyDefenseSystem: buildingActions.buyDefenseSystem,
-    buyCommunicationArray: buildingActions.buyCommunicationArray,
+    clickCrystals: state => {
+      // Calculate crystals gained from click power + collectors
+      let crystalGained = state.upgrades.crystalClickPower;
+
+      // Add crystal collector click power bonuses
+      crystalGained += state.crystalCollectors.basicMines * 1;
+      crystalGained += state.crystalCollectors.quantumDrills * 2;
+      crystalGained += state.crystalCollectors.stellarExtractors * 5;
+      crystalGained += state.crystalCollectors.voidHarvesters * 10;
+
+      state.resources.quantumCrystals += crystalGained;
+      state.statistics.totalClicks += 1;
+      state.statistics.totalCrystalsEarned += crystalGained;
+    },
+
+    // Energy Collector Actions
+    buyBasicCollector: collectorActions.buyBasicCollector,
+    buyQuantumReactor: collectorActions.buyQuantumReactor,
+    buyStellarForge: collectorActions.buyStellarForge,
+    buyVoidExtractor: collectorActions.buyVoidExtractor,
+
+    // Crystal Collector Actions
+    buyBasicMine: collectorActions.buyBasicMine,
+    buyQuantumDrill: collectorActions.buyQuantumDrill,
+    buyStellarExtractor: collectorActions.buyStellarExtractor,
+    buyVoidHarvester: collectorActions.buyVoidHarvester,
+
+    // Facility Actions
+    buyResearchLab: facilityActions.buyResearchLab,
+    buyDataCenter: facilityActions.buyDataCenter,
+    buyQuantumComputer: facilityActions.buyQuantumComputer,
+    buyNeuralNetwork: facilityActions.buyNeuralNetwork,
+    buyPowerGrid: facilityActions.buyPowerGrid,
+    buyTransportHub: facilityActions.buyTransportHub,
+    buyDefenseSystem: facilityActions.buyDefenseSystem,
+    buyCommunicationArray: facilityActions.buyCommunicationArray,
 
     // Upgrade Actions
     upgradeClickPower: upgradeActions.upgradeClickPower,
     upgradeCollectorEfficiency: upgradeActions.upgradeCollectorEfficiency,
+    upgradeCrystalClickPower: upgradeActions.upgradeCrystalClickPower,
+    upgradeCrystalEfficiency: upgradeActions.upgradeCrystalEfficiency,
 
     // Game Logic Actions
     generatePassiveEnergy: generatePassiveEnergyLogic,
@@ -88,15 +130,19 @@ const gameSlice = createSlice({
 
 export const { actions } = gameSlice;
 export const {
-  click,
+  clickEnergy,
+  clickCrystals,
+  // Energy Collector Actions
   buyBasicCollector,
   buyQuantumReactor,
   buyStellarForge,
   buyVoidExtractor,
-  buyCrystalMine,
-  buyQuantumRefinery,
-  buyMatterSynthesizer,
-  buyDimensionalExtractor,
+  // Crystal Collector Actions
+  buyBasicMine,
+  buyQuantumDrill,
+  buyStellarExtractor,
+  buyVoidHarvester,
+  // Facility Actions
   buyResearchLab,
   buyDataCenter,
   buyQuantumComputer,
@@ -105,8 +151,12 @@ export const {
   buyTransportHub,
   buyDefenseSystem,
   buyCommunicationArray,
+  // Upgrade Actions
   upgradeClickPower,
   upgradeCollectorEfficiency,
+  upgradeCrystalClickPower,
+  upgradeCrystalEfficiency,
+  // Game Logic Actions
   generatePassiveEnergy,
   generateEnergyFromCollectors,
   updatePlayTime,

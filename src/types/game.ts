@@ -5,23 +5,28 @@ export interface GameState {
     researchData: number;
     defensePoints: number;
   };
-  buildings: {
-    // Energy Buildings
+  // Energy Collectors (now modifiers/upgrades)
+  energyCollectors: {
     basicCollectors: number;
     quantumReactors: number;
     stellarForges: number;
     voidExtractors: number;
-    // Material Buildings
-    crystalMines: number;
-    quantumRefineries: number;
-    matterSynthesizers: number;
-    dimensionalExtractors: number;
-    // Research Buildings
+  };
+  // Crystal Collectors (new system)
+  crystalCollectors: {
+    basicMines: number;
+    quantumDrills: number;
+    stellarExtractors: number;
+    voidHarvesters: number;
+  };
+  // Facilities (buildings) - now more expensive and expanded
+  facilities: {
+    // Research Facilities
     researchLabs: number;
     dataCenters: number;
     quantumComputers: number;
     neuralNetworks: number;
-    // Defense Buildings
+    // Defense Infrastructure
     powerGrids: number;
     transportHubs: number;
     defenseSystems: number;
@@ -30,11 +35,14 @@ export interface GameState {
   upgrades: {
     clickPower: number;
     collectorEfficiency: number;
+    crystalClickPower: number;
+    crystalEfficiency: number;
   };
   achievements: string[];
   statistics: {
     totalClicks: number;
     totalEnergyEarned: number;
+    totalCrystalsEarned: number;
     playTime: number;
   };
 }
@@ -72,4 +80,26 @@ export interface ResourceType {
   emoji: string;
   color: string;
   borderColor: string;
+}
+
+export interface CollectorConfig {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  baseCost: BuildingCost;
+  costMultiplier: number;
+  baseProduction: number;
+  clickPower: number; // How much it adds to click power
+}
+
+export interface FacilityConfig {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+  baseCost: BuildingCost;
+  costMultiplier: number;
+  baseProduction: number;
+  category: 'material' | 'research' | 'defense';
 }

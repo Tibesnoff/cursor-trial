@@ -1,14 +1,18 @@
 import { useAppDispatch } from '../store/hooks';
 import {
-  click,
+  clickEnergy,
+  clickCrystals,
+  // Energy Collector Actions
   buyBasicCollector,
   buyQuantumReactor,
   buyStellarForge,
   buyVoidExtractor,
-  buyCrystalMine,
-  buyQuantumRefinery,
-  buyMatterSynthesizer,
-  buyDimensionalExtractor,
+  // Crystal Collector Actions
+  buyBasicMine,
+  buyQuantumDrill,
+  buyStellarExtractor,
+  buyVoidHarvester,
+  // Facility Actions
   buyResearchLab,
   buyDataCenter,
   buyQuantumComputer,
@@ -17,8 +21,11 @@ import {
   buyTransportHub,
   buyDefenseSystem,
   buyCommunicationArray,
+  // Upgrade Actions
   upgradeClickPower,
   upgradeCollectorEfficiency,
+  upgradeCrystalClickPower,
+  upgradeCrystalEfficiency,
 } from '../store/slices/gameSlice';
 
 export const useGameActions = () => {
@@ -26,17 +33,22 @@ export const useGameActions = () => {
 
   return {
     // Click actions
-    click: () => dispatch(click()),
+    clickEnergy: () => dispatch(clickEnergy()),
+    clickCrystals: () => dispatch(clickCrystals()),
 
-    // Building purchase actions
+    // Energy Collector Actions
     buyBasicCollector: () => dispatch(buyBasicCollector()),
     buyQuantumReactor: () => dispatch(buyQuantumReactor()),
     buyStellarForge: () => dispatch(buyStellarForge()),
     buyVoidExtractor: () => dispatch(buyVoidExtractor()),
-    buyCrystalMine: () => dispatch(buyCrystalMine()),
-    buyQuantumRefinery: () => dispatch(buyQuantumRefinery()),
-    buyMatterSynthesizer: () => dispatch(buyMatterSynthesizer()),
-    buyDimensionalExtractor: () => dispatch(buyDimensionalExtractor()),
+
+    // Crystal Collector Actions
+    buyBasicMine: () => dispatch(buyBasicMine()),
+    buyQuantumDrill: () => dispatch(buyQuantumDrill()),
+    buyStellarExtractor: () => dispatch(buyStellarExtractor()),
+    buyVoidHarvester: () => dispatch(buyVoidHarvester()),
+
+    // Facility Actions
     buyResearchLab: () => dispatch(buyResearchLab()),
     buyDataCenter: () => dispatch(buyDataCenter()),
     buyQuantumComputer: () => dispatch(buyQuantumComputer()),
@@ -49,5 +61,7 @@ export const useGameActions = () => {
     // Upgrade actions
     upgradeClickPower: () => dispatch(upgradeClickPower()),
     upgradeCollectorEfficiency: () => dispatch(upgradeCollectorEfficiency()),
+    upgradeCrystalClickPower: () => dispatch(upgradeCrystalClickPower()),
+    upgradeCrystalEfficiency: () => dispatch(upgradeCrystalEfficiency()),
   };
 };

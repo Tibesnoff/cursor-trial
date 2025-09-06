@@ -2,7 +2,7 @@ import { useGameState } from 'src/hooks';
 import { Card } from 'src/components/ui';
 
 const StatisticsPanel = () => {
-    const { statistics, buildings } = useGameState();
+    const { statistics, energyCollectors, crystalCollectors, facilities } = useGameState();
 
     const formatTime = (seconds: number) => {
         const hours = Math.floor(seconds / 3600);
@@ -35,37 +35,21 @@ const StatisticsPanel = () => {
                     </div>
                 </Card>
 
-                {/* Building Counts */}
+                {/* Collector Counts */}
                 <Card variant="bordered" padding="md">
-                    <h3 className="text-lg font-semibold text-white mb-4">Buildings</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">Collectors</h3>
                     <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                            <span className="text-gray-300">Basic Collectors:</span>
-                            <span className="text-cyan-400">{buildings.basicCollectors}</span>
+                            <span className="text-gray-300">Energy Collectors:</span>
+                            <span className="text-cyan-400">{energyCollectors.basicCollectors + energyCollectors.quantumReactors + energyCollectors.stellarForges + energyCollectors.voidExtractors}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-300">Quantum Reactors:</span>
-                            <span className="text-cyan-400">{buildings.quantumReactors}</span>
+                            <span className="text-gray-300">Crystal Collectors:</span>
+                            <span className="text-purple-400">{crystalCollectors.basicMines + crystalCollectors.quantumDrills + crystalCollectors.stellarExtractors + crystalCollectors.voidHarvesters}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-gray-300">Stellar Forges:</span>
-                            <span className="text-cyan-400">{buildings.stellarForges}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Void Extractors:</span>
-                            <span className="text-cyan-400">{buildings.voidExtractors}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Crystal Mines:</span>
-                            <span className="text-cyan-400">{buildings.crystalMines}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Research Labs:</span>
-                            <span className="text-cyan-400">{buildings.researchLabs}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-gray-300">Defense Systems:</span>
-                            <span className="text-cyan-400">{buildings.defenseSystems}</span>
+                            <span className="text-gray-300">Total Facilities:</span>
+                            <span className="text-green-400">{Object.values(facilities).reduce((sum, count) => sum + count, 0)}</span>
                         </div>
                     </div>
                 </Card>

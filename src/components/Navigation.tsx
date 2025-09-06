@@ -6,7 +6,8 @@ interface NavigationProps {
 const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
     const tabs = [
         { id: 'clicker', name: 'Quantum Collector', emoji: '⚡' },
-        { id: 'buildings', name: 'Facilities', emoji: '🏭' },
+        { id: 'crystals', name: 'Crystal Mine', emoji: '💎' },
+        { id: 'facilities', name: 'Facilities', emoji: '🏭' },
         { id: 'stats', name: 'Analytics', emoji: '📊' },
     ];
 

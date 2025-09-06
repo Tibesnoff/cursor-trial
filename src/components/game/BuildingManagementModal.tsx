@@ -8,14 +8,14 @@ interface BuildingManagementModalProps {
 }
 
 const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingManagementModalProps) => {
-    const { resources, buildings } = useGameState();
+    const { resources, facilities } = useGameState();
     const { quantumEnergy } = resources;
     const actions = useGameActions();
 
     if (!isOpen) return null;
 
     const buildingInfo = getBuildingInfo(buildingType);
-    const buildingCount = buildings[buildingType as keyof typeof buildings] || 0;
+    const buildingCount = facilities[buildingType as keyof typeof facilities] || 0;
     const upgradeCost = Math.floor(100 * Math.pow(2, buildingCount - 1));
     const canUpgrade = quantumEnergy >= upgradeCost;
 
@@ -73,14 +73,6 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
                             <Button
                                 onClick={() => {
                                     const actionMap: Record<string, () => void> = {
-                                        basicCollectors: actions.buyBasicCollector,
-                                        quantumReactors: actions.buyQuantumReactor,
-                                        stellarForges: actions.buyStellarForge,
-                                        voidExtractors: actions.buyVoidExtractor,
-                                        crystalMines: actions.buyCrystalMine,
-                                        quantumRefineries: actions.buyQuantumRefinery,
-                                        matterSynthesizers: actions.buyMatterSynthesizer,
-                                        dimensionalExtractors: actions.buyDimensionalExtractor,
                                         researchLabs: actions.buyResearchLab,
                                         dataCenters: actions.buyDataCenter,
                                         quantumComputers: actions.buyQuantumComputer,
@@ -113,29 +105,19 @@ const BuildingManagementModal = ({ buildingType, isOpen, onClose }: BuildingMana
 };
 
 function getBuildingInfo(type: string) {
-    const buildingTypes = {
-        // Energy Buildings
-        basicCollectors: { name: 'Basic Collector', emoji: '⚡', baseProduction: 1 },
-        quantumReactors: { name: 'Quantum Reactor', emoji: '🔬', baseProduction: 5 },
-        stellarForges: { name: 'Stellar Forge', emoji: '⭐', baseProduction: 500 },
-        voidExtractors: { name: 'Void Extractor', emoji: '🌀', baseProduction: 2500 },
-        // Material Buildings
-        crystalMines: { name: 'Crystal Mine', emoji: '💎', baseProduction: 2 },
-        quantumRefineries: { name: 'Quantum Refinery', emoji: '⚗️', baseProduction: 10 },
-        matterSynthesizers: { name: 'Matter Synthesizer', emoji: '🔮', baseProduction: 50 },
-        dimensionalExtractors: { name: 'Dimensional Extractor', emoji: '🌌', baseProduction: 250 },
-        // Research Buildings
+    const facilityTypes = {
+        // Research Facilities
         researchLabs: { name: 'Research Lab', emoji: '🧪', baseProduction: 3 },
         dataCenters: { name: 'Data Center', emoji: '💻', baseProduction: 15 },
         quantumComputers: { name: 'Quantum Computer', emoji: '🖥️', baseProduction: 75 },
         neuralNetworks: { name: 'Neural Network', emoji: '🧠', baseProduction: 375 },
-        // Defense Buildings
+        // Defense Facilities
         powerGrids: { name: 'Power Grid', emoji: '⚡', baseProduction: 1 },
         transportHubs: { name: 'Transport Hub', emoji: '🚀', baseProduction: 5 },
         defenseSystems: { name: 'Defense System', emoji: '🛡️', baseProduction: 25 },
         communicationArrays: { name: 'Communication Array', emoji: '📡', baseProduction: 125 },
     };
-    return buildingTypes[type as keyof typeof buildingTypes] || { name: 'Unknown', emoji: '❓', baseProduction: 1 };
+    return facilityTypes[type as keyof typeof facilityTypes] || { name: 'Unknown', emoji: '❓', baseProduction: 1 };
 }
 
 export default BuildingManagementModal;

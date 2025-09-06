@@ -17,3 +17,23 @@ export const upgradeCollectorEfficiency = (state: GameState) => {
     state.upgrades.collectorEfficiency += 1;
   }
 };
+
+export const upgradeCrystalClickPower = (state: GameState) => {
+  const cost = Math.floor(
+    50 * Math.pow(1.5, state.upgrades.crystalClickPower - 1)
+  );
+  if (state.resources.quantumCrystals >= cost) {
+    state.resources.quantumCrystals -= cost;
+    state.upgrades.crystalClickPower += 1;
+  }
+};
+
+export const upgradeCrystalEfficiency = (state: GameState) => {
+  const cost = Math.floor(
+    100 * Math.pow(1.5, state.upgrades.crystalEfficiency - 1)
+  );
+  if (state.resources.quantumCrystals >= cost) {
+    state.resources.quantumCrystals -= cost;
+    state.upgrades.crystalEfficiency += 1;
+  }
+};

@@ -2,7 +2,7 @@ import { useGameActions } from 'src/hooks';
 import { Button } from 'src/components/ui';
 
 const MainClicker = () => {
-    const { click } = useGameActions();
+    const { clickEnergy } = useGameActions();
 
     return (
         <div className="bg-black/20 backdrop-blur-sm rounded-xl p-8 border border-blue-500/30 text-center">
@@ -11,7 +11,7 @@ const MainClicker = () => {
                 Click to harvest quantum energy from the cosmic void
             </p>
             <Button
-                onClick={click}
+                onClick={clickEnergy}
                 variant="primary"
                 size="lg"
                 className="text-4xl p-8 rounded-full hover:scale-105 transition-transform"

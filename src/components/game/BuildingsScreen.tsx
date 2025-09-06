@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useGameState, useGameActions } from 'src/hooks';
-import { BUILDING_GROUPS } from 'src/config';
+import { RESEARCH_FACILITIES, DEFENSE_FACILITIES } from 'src/config';
 import { BuildingCard } from 'src/components/common';
 import BuildingManagementModal from 'src/components/game/BuildingManagementModal';
 
 const BuildingsScreen = () => {
-    const { buildings } = useGameState();
+    const { facilities } = useGameState();
     const actions = useGameActions();
 
     const [selectedBuildingType, setSelectedBuildingType] = useState<string | null>(null);
@@ -17,16 +17,8 @@ const BuildingsScreen = () => {
         setSelectedBuildingType(null);
     };
 
-    // Action mapping for buildings
+    // Action mapping for facilities
     const actionMap: Record<string, () => void> = {
-        basicCollectors: actions.buyBasicCollector,
-        quantumReactors: actions.buyQuantumReactor,
-        stellarForges: actions.buyStellarForge,
-        voidExtractors: actions.buyVoidExtractor,
-        crystalMines: actions.buyCrystalMine,
-        quantumRefineries: actions.buyQuantumRefinery,
-        matterSynthesizers: actions.buyMatterSynthesizer,
-        dimensionalExtractors: actions.buyDimensionalExtractor,
         researchLabs: actions.buyResearchLab,
         dataCenters: actions.buyDataCenter,
         quantumComputers: actions.buyQuantumComputer,
@@ -37,21 +29,37 @@ const BuildingsScreen = () => {
         communicationArrays: actions.buyCommunicationArray,
     };
 
-    // Create building groups with actions
-    const buildingGroups = BUILDING_GROUPS.map(group => ({
-        ...group,
-        buildings: group.buildings.map(buildingConfig => ({
-            ...buildingConfig,
-            count: buildings[buildingConfig.id as keyof typeof buildings],
-            action: actionMap[buildingConfig.id] || (() => { })
-        }))
-    }));
+    // Create facility groups with actions
+    const facilityGroups = [
+        {
+            id: 'research',
+            name: '🧪 Research & Development',
+            description: 'Facilities that generate research data for advanced technologies',
+            color: 'green',
+            buildings: RESEARCH_FACILITIES.map(facility => ({
+                ...facility,
+                count: facilities[facility.id as keyof typeof facilities],
+                action: actionMap[facility.id] || (() => { })
+            }))
+        },
+        {
+            id: 'defense',
+            name: '🛡️ Defense Infrastructure',
+            description: 'Facilities that protect your empire and enable advanced operations',
+            color: 'red',
+            buildings: DEFENSE_FACILITIES.map(facility => ({
+                ...facility,
+                count: facilities[facility.id as keyof typeof facilities],
+                action: actionMap[facility.id] || (() => { })
+            }))
+        }
+    ];
 
     return (
         <div className="space-y-6">
-            {/* Building Construction Groups */}
+            {/* Facility Construction Groups */}
             <div className="space-y-8">
-                {buildingGroups.map(group => (
+                {facilityGroups.map(group => (
                     <div key={group.id} className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-green-500/30">
                         <div className="mb-6">
                             <h3 className="text-2xl font-bold text-white mb-2">{group.name}</h3>

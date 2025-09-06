@@ -8,8 +8,16 @@ export const useResources = () => {
   return useAppSelector(state => state.game.resources);
 };
 
-export const useBuildings = () => {
-  return useAppSelector(state => state.game.buildings);
+export const useEnergyCollectors = () => {
+  return useAppSelector(state => state.game.energyCollectors);
+};
+
+export const useCrystalCollectors = () => {
+  return useAppSelector(state => state.game.crystalCollectors);
+};
+
+export const useFacilities = () => {
+  return useAppSelector(state => state.game.facilities);
 };
 
 export const useUpgrades = () => {
