@@ -231,3 +231,21 @@ const getCurrentUpgradeLevel = (state: any, upgradeId: string): number => {
   }
   return 0;
 };
+
+/**
+ * Calculate autoclicker speed (clicks per second)
+ */
+export const calculateAutoClickerSpeed = (autoClickerLevel: number): number => {
+  if (autoClickerLevel === 0) return 0;
+  const clickInterval = Math.max(1, 5 - autoClickerLevel); // 5s, 4s, 3s, 2s, 1s
+  return 1 / clickInterval; // clicks per second
+};
+
+/**
+ * Calculate autoclicker efficiency bonus
+ */
+export const calculateAutoClickerEfficiency = (
+  autoClickerLevel: number
+): number => {
+  return 1 + autoClickerLevel * 0.1; // 10% bonus per level
+};

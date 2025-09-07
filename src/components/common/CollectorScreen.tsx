@@ -18,6 +18,12 @@ interface CollectorScreenProps {
     clickUpgradeCost?: BuildingCost;
     clickPowerIncrease?: number;
     collectorType: 'energy' | 'crystal';
+    // Autoclicker props
+    autoClickerLevel?: number;
+    autoClickerSpeed?: number;
+    autoClickerEfficiency?: number;
+    autoClickerUpgradeCost?: BuildingCost;
+    onAutoClickerUpgrade?: () => void;
 }
 
 const CollectorScreen = ({
@@ -35,6 +41,12 @@ const CollectorScreen = ({
     clickUpgradeCost,
     clickPowerIncrease = 1,
     collectorType,
+    // Autoclicker props
+    autoClickerLevel = 0,
+    autoClickerSpeed = 0,
+    autoClickerEfficiency = 1,
+    autoClickerUpgradeCost,
+    onAutoClickerUpgrade,
 }: CollectorScreenProps) => {
     const { resources, upgrades } = useGameState();
 
@@ -89,6 +101,11 @@ const CollectorScreen = ({
                     formatCost={formatCost}
                     onCollect={onCollect}
                     onUpgradeClick={onUpgradeClick}
+                    autoClickerLevel={autoClickerLevel}
+                    autoClickerSpeed={autoClickerSpeed}
+                    autoClickerEfficiency={autoClickerEfficiency}
+                    autoClickerUpgradeCost={autoClickerUpgradeCost}
+                    onAutoClickerUpgrade={onAutoClickerUpgrade}
                 />
 
                 <ProductionSection

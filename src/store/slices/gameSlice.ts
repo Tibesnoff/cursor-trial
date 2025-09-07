@@ -9,6 +9,7 @@ import {
   generatePassiveEnergy as generatePassiveEnergyLogic,
   generateEnergyFromCollectors as generateEnergyFromCollectorsLogic,
   updatePlayTime as updatePlayTimeLogic,
+  processAutoClicker as processAutoClickerLogic,
 } from '../logic/gameLogic';
 import {
   calculateEnergyClickPower,
@@ -271,6 +272,7 @@ const gameSlice = createSlice({
     generatePassiveEnergy: generatePassiveEnergyLogic,
     generateEnergyFromCollectors: generateEnergyFromCollectorsLogic,
     updatePlayTime: updatePlayTimeLogic,
+    processAutoClicker: processAutoClickerLogic,
   },
   extraReducers: builder => {
     builder
@@ -329,6 +331,7 @@ export const {
   generatePassiveEnergy,
   generateEnergyFromCollectors,
   updatePlayTime,
+  processAutoClicker,
   // Tab Actions
   unlockTab,
   // Development Actions

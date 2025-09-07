@@ -11,6 +11,12 @@ interface CollectSectionProps {
     formatCost: (cost: BuildingCost) => string;
     onCollect: () => void;
     onUpgradeClick: () => void;
+    // Autoclicker props
+    autoClickerLevel?: number;
+    autoClickerSpeed?: number;
+    autoClickerEfficiency?: number;
+    autoClickerUpgradeCost?: BuildingCost;
+    onAutoClickerUpgrade?: () => void;
 }
 
 const CollectSection: React.FC<CollectSectionProps> = ({
@@ -22,6 +28,12 @@ const CollectSection: React.FC<CollectSectionProps> = ({
     formatCost,
     onCollect,
     onUpgradeClick,
+    // Autoclicker props
+    autoClickerLevel = 0,
+    autoClickerSpeed = 0,
+    autoClickerEfficiency = 1,
+    autoClickerUpgradeCost,
+    onAutoClickerUpgrade,
 }) => {
     return (
         <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-xl p-6 border border-blue-500/30">
@@ -51,6 +63,48 @@ const CollectSection: React.FC<CollectSectionProps> = ({
                     ⬆️ +{clickPowerIncrease} Click ({formatCost(clickUpgradeCost || {})})
                 </Button>
             </div>
+
+            {/* Auto Clicker Section */}
+            {autoClickerLevel > 0 && (
+                <div className="bg-black/30 rounded-lg p-4 text-center">
+                    <h4 className="text-lg font-bold text-white mb-2">🤖 Auto Clicker</h4>
+                    <div className="text-sm text-gray-300 mb-2">
+                        <div>Level: {autoClickerLevel}</div>
+                        <div>Speed: {autoClickerSpeed.toFixed(2)} clicks/sec</div>
+                        <div>Efficiency: +{Math.round((autoClickerEfficiency - 1) * 100)}%</div>
+                    </div>
+                    {onAutoClickerUpgrade && autoClickerUpgradeCost && (
+                        <Button
+                            onClick={onAutoClickerUpgrade}
+                            variant="secondary"
+                            size="sm"
+                            className="w-full"
+                            disabled={!canAfford(autoClickerUpgradeCost)}
+                        >
+                            ⬆️ Upgrade Auto Clicker ({formatCost(autoClickerUpgradeCost)})
+                        </Button>
+                    )}
+                </div>
+            )}
+
+            {/* Auto Clicker Purchase Button (if not owned) */}
+            {autoClickerLevel === 0 && onAutoClickerUpgrade && autoClickerUpgradeCost && (
+                <div className="bg-black/30 rounded-lg p-4 text-center">
+                    <h4 className="text-lg font-bold text-white mb-2">🤖 Auto Clicker</h4>
+                    <p className="text-sm text-gray-300 mb-3">
+                        Automatically clicks for you (faster with higher levels)
+                    </p>
+                    <Button
+                        onClick={onAutoClickerUpgrade}
+                        variant="secondary"
+                        size="sm"
+                        className="w-full"
+                        disabled={!canAfford(autoClickerUpgradeCost)}
+                    >
+                        🤖 Buy Auto Clicker ({formatCost(autoClickerUpgradeCost)})
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

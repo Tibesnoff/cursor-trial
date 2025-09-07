@@ -4,6 +4,7 @@ import {
     generatePassiveEnergy,
     generateEnergyFromCollectors,
     updatePlayTime,
+    processAutoClicker,
 } from 'src/store/slices/gameSlice';
 import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen, MiscScreen } from 'src/components/game';
 import SidebarNavigation from 'src/components/SidebarNavigation';
@@ -45,10 +46,11 @@ const GameContainer = () => {
         return () => clearInterval(interval);
     }, [dispatch]);
 
-    // Play time tracking
+    // Play time tracking and autoclicker
     useEffect(() => {
         const interval = setInterval(() => {
             dispatch(updatePlayTime(undefined));
+            dispatch(processAutoClicker(undefined));
         }, 1000);
 
         return () => clearInterval(interval);

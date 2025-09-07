@@ -1,7 +1,7 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
-import { calculateEnergyClickPower, calculateCollectorEfficiency, calculateClickPowerIncrease } from 'src/utils/upgradeCalculations';
+import { calculateEnergyClickPower, calculateCollectorEfficiency, calculateClickPowerIncrease, calculateAutoClickerSpeed, calculateAutoClickerEfficiency } from 'src/utils/upgradeCalculations';
 import { calculateUpgradeCost, getCurrentUpgradeLevel } from 'src/store/actions/upgradeActions';
 import QuantumCollectorUpgrades from '../upgrades/QuantumCollectorUpgrades';
 
@@ -41,6 +41,16 @@ const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollecto
     // Calculate click power increase for next upgrade
     const clickPowerIncrease = calculateClickPowerIncrease({ upgrades } as any, clickUpgradeId, 'energy');
 
+    // Calculate autoclicker information
+    const autoClickerLevel = upgrades.energyUpgrades.auto_clicker || 0;
+    const autoClickerSpeed = calculateAutoClickerSpeed(autoClickerLevel);
+    const autoClickerEfficiency = calculateAutoClickerEfficiency(autoClickerLevel);
+
+    // Calculate autoclicker upgrade cost
+    const autoClickerUpgradeId = 'auto_clicker';
+    const currentAutoClickerLevel = getCurrentUpgradeLevel({ game: { upgrades } } as any, autoClickerUpgradeId);
+    const autoClickerUpgradeCost = calculateUpgradeCost(autoClickerUpgradeId, currentAutoClickerLevel, { game: { upgrades } } as any);
+
     const buyActions = {
         basicCollectors: buyBasicCollector,
         quantumReactors: buyQuantumReactor,
@@ -68,6 +78,11 @@ const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollecto
                     clickUpgradeCost={clickUpgradeCost}
                     clickPowerIncrease={clickPowerIncrease}
                     collectorType="energy"
+                    autoClickerLevel={autoClickerLevel}
+                    autoClickerSpeed={autoClickerSpeed}
+                    autoClickerEfficiency={autoClickerEfficiency}
+                    autoClickerUpgradeCost={autoClickerUpgradeCost}
+                    onAutoClickerUpgrade={() => buyUpgrade(autoClickerUpgradeId)}
                 />
             )}
 
