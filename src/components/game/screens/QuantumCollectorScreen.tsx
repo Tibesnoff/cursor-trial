@@ -1,7 +1,7 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
-import { calculateEnergyClickPower, calculateCollectorEfficiency } from 'src/utils/upgradeCalculations';
+import { calculateEnergyClickPower, calculateCollectorEfficiency, calculateClickPowerIncrease } from 'src/utils/upgradeCalculations';
 import { calculateUpgradeCost, getCurrentUpgradeLevel } from 'src/store/actions/upgradeActions';
 import QuantumCollectorUpgrades from '../upgrades/QuantumCollectorUpgrades';
 
@@ -38,8 +38,8 @@ const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollecto
     const currentClickUpgradeLevel = getCurrentUpgradeLevel({ game: { upgrades } } as any, clickUpgradeId);
     const clickUpgradeCost = calculateUpgradeCost(clickUpgradeId, currentClickUpgradeLevel, { game: { upgrades } } as any);
 
-    // Calculate click power increase for next upgrade (always +1 for energy_click_boost)
-    const clickPowerIncrease = 1;
+    // Calculate click power increase for next upgrade
+    const clickPowerIncrease = calculateClickPowerIncrease({ upgrades } as any, clickUpgradeId, 'energy');
 
     const buyActions = {
         basicCollectors: buyBasicCollector,

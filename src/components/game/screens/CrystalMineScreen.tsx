@@ -1,7 +1,7 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { CRYSTAL_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
-import { calculateCrystalClickPower, calculateCollectorEfficiency } from 'src/utils/upgradeCalculations';
+import { calculateCrystalClickPower, calculateCollectorEfficiency, calculateClickPowerIncrease } from 'src/utils/upgradeCalculations';
 import { calculateUpgradeCost, getCurrentUpgradeLevel } from 'src/store/actions/upgradeActions';
 import CrystalMineUpgrades from '../upgrades/CrystalMineUpgrades';
 
@@ -38,8 +38,8 @@ const CrystalMineScreen = ({ activeSubTab = 'collectors' }: CrystalMineScreenPro
     const currentClickUpgradeLevel = getCurrentUpgradeLevel({ game: { upgrades } } as any, clickUpgradeId);
     const clickUpgradeCost = calculateUpgradeCost(clickUpgradeId, currentClickUpgradeLevel, { game: { upgrades } } as any);
 
-    // Calculate click power increase for next upgrade (always +1 for crystal_click_boost)
-    const clickPowerIncrease = 1;
+    // Calculate click power increase for next upgrade
+    const clickPowerIncrease = calculateClickPowerIncrease({ upgrades } as any, clickUpgradeId, 'crystal');
 
     const buyActions = {
         basicMines: buyBasicMine,

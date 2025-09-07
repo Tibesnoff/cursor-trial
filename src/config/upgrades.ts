@@ -33,7 +33,7 @@ export const ENERGY_UPGRADES: UpgradeConfig[] = [
     category: 'click_power',
     baseCost: { quantumEnergy: 25 },
     costMultiplier: 1.3,
-    maxLevel: 50,
+    maxLevel: -1, // Unlimited
     effect: {
       type: 'additive',
       value: 1,
@@ -210,7 +210,7 @@ export const CRYSTAL_UPGRADES: UpgradeConfig[] = [
     category: 'click_power',
     baseCost: { quantumCrystals: 15 },
     costMultiplier: 1.3,
-    maxLevel: 50,
+    maxLevel: -1, // Unlimited
     effect: {
       type: 'additive',
       value: 1,

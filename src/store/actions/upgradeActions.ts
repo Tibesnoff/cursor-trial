@@ -72,6 +72,9 @@ const isMaxLevel = (state: RootState, upgradeId: string): boolean => {
   const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
   if (!upgrade) return true;
 
+  // -1 means unlimited upgrades
+  if (upgrade.maxLevel === -1) return false;
+
   const currentLevel = getCurrentUpgradeLevel(state, upgradeId);
   return currentLevel >= upgrade.maxLevel;
 };

@@ -4,6 +4,7 @@ import { calculateUpgradeCost, canAffordUpgrade, checkPrerequisites, isMaxLevel,
 import { ALL_UPGRADES } from '../../config/upgrades';
 import type { RootState } from '../../store';
 import { useAppSelector } from '../../store/hooks';
+import { calculateClickPowerIncrease } from '../../utils/upgradeCalculations';
 
 interface UpgradeCardProps {
     upgrade: UpgradeConfig;
@@ -46,6 +47,22 @@ const UpgradeCard: React.FC<UpgradeCardProps> = ({ upgrade, onBuy }) => {
         const { effect } = upgrade;
         const levelBonus = currentLevel * effect.value;
 
+        // For click power upgrades, show the actual click power increase with modifiers
+        if (effect.target === 'click_power') {
+            const collectorType = upgrade.collectorType === 'both' ? 'energy' : upgrade.collectorType;
+            const actualIncrease = calculateClickPowerIncrease(state.game, upgrade.id, collectorType as 'energy' | 'crystal');
+
+            switch (effect.type) {
+                case 'additive':
+                    return `+${actualIncrease} per click (Base: +${effect.value})`;
+                case 'multiplier':
+                    return `+${actualIncrease} per click (${effect.value}x multiplier)`;
+                default:
+                    return `+${actualIncrease} per click`;
+            }
+        }
+
+        // For other upgrade types, use the original logic
         switch (effect.type) {
             case 'additive':
                 return `+${effect.value} per level (Current: +${levelBonus})`;

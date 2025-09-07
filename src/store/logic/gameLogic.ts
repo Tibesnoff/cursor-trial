@@ -1,4 +1,5 @@
 import type { GameState } from 'src/types';
+import { calculateCollectorEfficiency } from '../../utils/upgradeCalculations';
 
 export const generatePassiveEnergy = (state: GameState) => {
   const { research, defense } = state;
@@ -22,25 +23,35 @@ export const generatePassiveEnergy = (state: GameState) => {
 };
 
 export const generateEnergyFromCollectors = (state: GameState) => {
-  const { energyCollectors, crystalCollectors, upgrades } = state;
+  const { energyCollectors, crystalCollectors } = state;
 
-  // Calculate energy production from energy collectors
+  // Calculate energy production from energy collectors (including all tiers)
   const energyProduction =
     energyCollectors.basicCollectors * 1 +
     energyCollectors.quantumReactors * 5 +
     energyCollectors.stellarForges * 50 +
-    energyCollectors.voidExtractors * 500;
+    energyCollectors.voidExtractors * 500 +
+    energyCollectors.dimensionalRifts * 5000 +
+    energyCollectors.cosmicGenerators * 50000;
 
-  // Calculate crystal production from crystal collectors
+  // Calculate crystal production from crystal collectors (including all tiers)
   const crystalProduction =
     crystalCollectors.basicMines * 1 +
     crystalCollectors.quantumDrills * 5 +
     crystalCollectors.stellarExtractors * 50 +
-    crystalCollectors.voidHarvesters * 500;
+    crystalCollectors.voidHarvesters * 500 +
+    crystalCollectors.dimensionalMines * 5000 +
+    crystalCollectors.cosmicRefineries * 50000;
 
-  // Apply efficiency upgrades
-  const energyEfficiencyMultiplier = 1 + upgrades.collectorEfficiency * 0.1;
-  const crystalEfficiencyMultiplier = 1 + upgrades.crystalEfficiency * 0.1;
+  // Apply efficiency upgrades from new upgrade system
+  const energyEfficiencyMultiplier = calculateCollectorEfficiency(
+    state,
+    'energy'
+  );
+  const crystalEfficiencyMultiplier = calculateCollectorEfficiency(
+    state,
+    'crystal'
+  );
 
   // Add resources
   state.resources.quantumEnergy += Math.floor(
