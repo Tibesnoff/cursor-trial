@@ -1,6 +1,7 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
+import { calculateClickPowerIncrease } from 'src/utils/clickCalculations';
 
 const QuantumCollectorScreen = () => {
     const { energyCollectors, upgrades } = useGameState();
@@ -26,10 +27,30 @@ const QuantumCollectorScreen = () => {
 
     const energyProduction = calculateEnergyProduction();
 
-    // Calculate click upgrade cost (matches upgradeActions.ts)
-    const clickUpgradeCost = {
-        quantumEnergy: Math.floor(10 * Math.pow(1.5, upgrades.clickPower - 1))
+    // Calculate click upgrade cost (matches upgradeActions.ts tiered scaling)
+    const calculateClickUpgradeCost = (level: number) => {
+        if (level < 20) {
+            return 5 + level * 5;
+        } else if (level < 40) {
+            return 100 + (level - 20) * 100;
+        } else if (level < 60) {
+            return 2000 + (level - 40) * 100;
+        } else if (level < 80) {
+            return 4000 + (level - 60) * 100;
+        } else {
+            return Math.floor(6000 * Math.pow(1.1, level - 80));
+        }
     };
+
+    const baseCost = calculateClickUpgradeCost(upgrades.clickPower);
+    const finalCost = Math.floor(baseCost * (1 - upgrades.clickCostReduction));
+
+    const clickUpgradeCost = {
+        quantumEnergy: finalCost
+    };
+
+    // Calculate click power increase for next upgrade
+    const clickPowerIncrease = calculateClickPowerIncrease(upgrades.clickPower);
 
     const buyActions = {
         basicCollectors: buyBasicCollector,
@@ -54,6 +75,7 @@ const QuantumCollectorScreen = () => {
             resourceEmoji="⚡"
             resourceName="Energy"
             clickUpgradeCost={clickUpgradeCost}
+            clickPowerIncrease={clickPowerIncrease}
         />
     );
 };

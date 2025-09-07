@@ -42,6 +42,11 @@ export interface GameState {
     collectorEfficiency: number;
     crystalClickPower: number;
     crystalEfficiency: number;
+    // Research-based click upgrades
+    clickMultiplier: number;
+    clickBonus: number;
+    clickCostReduction: number;
+    clickChance: number;
   };
   researchTree: {
     unlocked: string[];
@@ -127,7 +132,16 @@ export interface ResearchNode {
   };
   prerequisites: string[];
   effects: {
-    type: 'energy' | 'crystal' | 'defense' | 'ship' | 'unlock';
+    type:
+      | 'energy'
+      | 'crystal'
+      | 'defense'
+      | 'ship'
+      | 'unlock'
+      | 'click_multiplier'
+      | 'click_bonus'
+      | 'click_cost_reduction'
+      | 'click_chance';
     value: number;
     description: string;
   }[];

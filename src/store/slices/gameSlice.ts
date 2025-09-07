@@ -54,6 +54,11 @@ const initialState: GameState = {
     collectorEfficiency: 1,
     crystalClickPower: 1,
     crystalEfficiency: 1,
+    // Research-based click upgrades
+    clickMultiplier: 1,
+    clickBonus: 0,
+    clickCostReduction: 0,
+    clickChance: 0,
   },
   researchTree: {
     unlocked: ['basic_research'],
@@ -75,8 +80,19 @@ const gameSlice = createSlice({
   reducers: {
     // Core Actions
     clickEnergy: state => {
-      // Calculate energy gained from click power + collectors
-      let energyGained = state.upgrades.clickPower;
+      // Calculate energy gained from click power + research bonuses
+      let energyGained = state.upgrades.clickPower + state.upgrades.clickBonus;
+
+      // Apply click multiplier from research
+      energyGained *= state.upgrades.clickMultiplier;
+
+      // Apply click chance (multi-click)
+      if (
+        state.upgrades.clickChance > 0 &&
+        Math.random() < state.upgrades.clickChance
+      ) {
+        energyGained *= 2; // Double click
+      }
 
       // Add energy collector click power bonuses
       energyGained += state.energyCollectors.basicCollectors * 1;
@@ -90,8 +106,20 @@ const gameSlice = createSlice({
     },
 
     clickCrystals: state => {
-      // Calculate crystals gained from click power + collectors
-      let crystalGained = state.upgrades.crystalClickPower;
+      // Calculate crystals gained from click power + research bonuses
+      let crystalGained =
+        state.upgrades.crystalClickPower + state.upgrades.clickBonus;
+
+      // Apply click multiplier from research
+      crystalGained *= state.upgrades.clickMultiplier;
+
+      // Apply click chance (multi-click)
+      if (
+        state.upgrades.clickChance > 0 &&
+        Math.random() < state.upgrades.clickChance
+      ) {
+        crystalGained *= 2; // Double click
+      }
 
       // Add crystal collector click power bonuses
       crystalGained += state.crystalCollectors.basicMines * 1;

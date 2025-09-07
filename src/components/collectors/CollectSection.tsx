@@ -5,6 +5,7 @@ interface CollectSectionProps {
     resourceEmoji: string;
     resourceName: string;
     clickUpgradeCost: any;
+    clickPowerIncrease: number;
     canAfford: (cost: any) => boolean;
     formatCost: (cost: any) => string;
     onCollect: () => void;
@@ -15,6 +16,7 @@ const CollectSection: React.FC<CollectSectionProps> = ({
     resourceEmoji,
     resourceName,
     clickUpgradeCost,
+    clickPowerIncrease,
     canAfford,
     formatCost,
     onCollect,
@@ -45,7 +47,7 @@ const CollectSection: React.FC<CollectSectionProps> = ({
                     className="w-full"
                     disabled={!clickUpgradeCost || !canAfford(clickUpgradeCost)}
                 >
-                    ⬆️ Upgrade Click ({formatCost(clickUpgradeCost || {})})
+                    ⬆️ +{clickPowerIncrease} Click ({formatCost(clickUpgradeCost || {})})
                 </Button>
             </div>
         </div>

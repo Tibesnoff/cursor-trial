@@ -15,6 +15,7 @@ interface CollectorScreenProps {
     resourceEmoji: string;
     resourceName: string;
     clickUpgradeCost?: any;
+    clickPowerIncrease?: number;
 }
 
 const CollectorScreen = ({
@@ -30,6 +31,7 @@ const CollectorScreen = ({
     resourceEmoji,
     resourceName,
     clickUpgradeCost,
+    clickPowerIncrease = 1,
 }: CollectorScreenProps) => {
     const { resources, upgrades } = useGameState();
 
@@ -76,6 +78,7 @@ const CollectorScreen = ({
                     resourceEmoji={resourceEmoji}
                     resourceName={resourceName}
                     clickUpgradeCost={clickUpgradeCost}
+                    clickPowerIncrease={clickPowerIncrease}
                     canAfford={canAfford}
                     formatCost={formatCost}
                     onCollect={onCollect}

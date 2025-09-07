@@ -1,6 +1,7 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { CRYSTAL_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
+import { calculateCrystalClickPowerIncrease } from 'src/utils/clickCalculations';
 
 const CrystalMineScreen = () => {
     const { crystalCollectors, upgrades } = useGameState();
@@ -26,10 +27,30 @@ const CrystalMineScreen = () => {
 
     const crystalProduction = calculateCrystalProduction();
 
-    // Calculate click upgrade cost (matches upgradeActions.ts)
-    const clickUpgradeCost = {
-        quantumCrystals: Math.floor(5 * Math.pow(1.5, upgrades.crystalClickPower - 1))
+    // Calculate click upgrade cost (matches upgradeActions.ts tiered scaling)
+    const calculateCrystalClickUpgradeCost = (level: number) => {
+        if (level < 20) {
+            return 3 + level * 3;
+        } else if (level < 40) {
+            return 60 + (level - 20) * 60;
+        } else if (level < 60) {
+            return 1200 + (level - 40) * 60;
+        } else if (level < 80) {
+            return 2400 + (level - 60) * 60;
+        } else {
+            return Math.floor(3600 * Math.pow(1.1, level - 80));
+        }
     };
+
+    const baseCost = calculateCrystalClickUpgradeCost(upgrades.crystalClickPower);
+    const finalCost = Math.floor(baseCost * (1 - upgrades.clickCostReduction));
+
+    const clickUpgradeCost = {
+        quantumCrystals: finalCost
+    };
+
+    // Calculate crystal click power increase for next upgrade
+    const clickPowerIncrease = calculateCrystalClickPowerIncrease(upgrades.crystalClickPower);
 
     const buyActions = {
         basicMines: buyBasicMine,
@@ -54,6 +75,7 @@ const CrystalMineScreen = () => {
             resourceEmoji="💎"
             resourceName="Crystals"
             clickUpgradeCost={clickUpgradeCost}
+            clickPowerIncrease={clickPowerIncrease}
         />
     );
 };

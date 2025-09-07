@@ -91,15 +91,35 @@ export const unlockResearchNode = (
   // Find the research node to get its cost
   const researchNodes = [
     { id: 'basic_research', cost: { researchData: 0 } },
-    { id: 'quantum_theory', cost: { researchData: 10000 } },
-    { id: 'energy_efficiency', cost: { researchData: 25000, quantumEnergy: 5000 } },
+    { id: 'quantum_theory', cost: { researchData: 100 } },
+    {
+      id: 'click_amplification',
+      cost: { researchData: 150, quantumEnergy: 25 },
+    },
+    {
+      id: 'quantum_clicking',
+      cost: { researchData: 500, quantumEnergy: 100, quantumCrystals: 10 },
+    },
+    { id: 'energy_efficiency', cost: { researchData: 250, quantumEnergy: 50 } },
     {
       id: 'stellar_harvesting',
-      cost: { researchData: 100000, quantumEnergy: 50000, quantumCrystals: 2500 },
+      cost: {
+        researchData: 100000,
+        quantumEnergy: 50000,
+        quantumCrystals: 2500,
+      },
     },
     {
       id: 'void_manipulation',
-      cost: { researchData: 500000, quantumEnergy: 250000, quantumCrystals: 12500 },
+      cost: { researchData: 5000, quantumEnergy: 2500, quantumCrystals: 125 },
+    },
+    {
+      id: 'click_efficiency',
+      cost: { researchData: 2000, quantumEnergy: 1000, quantumCrystals: 50 },
+    },
+    {
+      id: 'multi_click',
+      cost: { researchData: 8000, quantumEnergy: 4000, quantumCrystals: 200 },
     },
     {
       id: 'crystal_refinement',
@@ -107,16 +127,31 @@ export const unlockResearchNode = (
     },
     {
       id: 'dimensional_mining',
-      cost: { researchData: 150000, quantumEnergy: 75000, quantumCrystals: 5000 },
+      cost: {
+        researchData: 150000,
+        quantumEnergy: 75000,
+        quantumCrystals: 5000,
+      },
     },
     {
       id: 'quantum_crystallography',
-      cost: { researchData: 750000, quantumEnergy: 375000, quantumCrystals: 25000 },
+      cost: {
+        researchData: 750000,
+        quantumEnergy: 375000,
+        quantumCrystals: 25000,
+      },
     },
-    { id: 'defense_systems', cost: { researchData: 40000, defensePoints: 2000 } },
+    {
+      id: 'defense_systems',
+      cost: { researchData: 40000, defensePoints: 2000 },
+    },
     {
       id: 'shield_technology',
-      cost: { researchData: 200000, quantumEnergy: 100000, defensePoints: 10000 },
+      cost: {
+        researchData: 200000,
+        quantumEnergy: 100000,
+        defensePoints: 10000,
+      },
     },
     {
       id: 'weapon_systems',
@@ -129,7 +164,11 @@ export const unlockResearchNode = (
     },
     {
       id: 'ship_design',
-      cost: { researchData: 500000, quantumEnergy: 250000, quantumCrystals: 25000 },
+      cost: {
+        researchData: 500000,
+        quantumEnergy: 250000,
+        quantumCrystals: 25000,
+      },
     },
     {
       id: 'combat_systems',
@@ -182,5 +221,37 @@ export const completeResearchNode = (
     state.researchTree.unlocked = state.researchTree.unlocked.filter(
       id => id !== nodeId
     );
+
+    // Apply research effects
+    applyResearchEffects(state, nodeId);
   }
+};
+
+// Helper function to apply research effects
+const applyResearchEffects = (state: GameState, nodeId: string) => {
+  // Import RESEARCH_NODES to get the effects
+  const { RESEARCH_NODES } = require('../../config/research');
+  const node = RESEARCH_NODES.find(n => n.id === nodeId);
+
+  if (!node) return;
+
+  node.effects.forEach(effect => {
+    switch (effect.type) {
+      case 'click_multiplier':
+        state.upgrades.clickMultiplier *= effect.value;
+        break;
+      case 'click_bonus':
+        state.upgrades.clickBonus += effect.value;
+        break;
+      case 'click_cost_reduction':
+        state.upgrades.clickCostReduction += effect.value;
+        break;
+      case 'click_chance':
+        state.upgrades.clickChance += effect.value;
+        break;
+      // Add other effect types as needed
+      default:
+        break;
+    }
+  });
 };

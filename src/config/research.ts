@@ -30,6 +30,31 @@ export const RESEARCH_NODES: ResearchNode[] = [
     ],
     category: 'foundation',
   },
+  {
+    id: 'click_amplification',
+    name: 'Click Amplification',
+    description:
+      'Enhance manual collection efficiency through quantum resonance',
+    emoji: '👆',
+    cost: { researchData: 150, quantumEnergy: 25 },
+    prerequisites: ['quantum_theory'],
+    effects: [
+      { type: 'click_multiplier', value: 1.5, description: '+50% click power' },
+    ],
+    category: 'foundation',
+  },
+  {
+    id: 'quantum_clicking',
+    name: 'Quantum Clicking',
+    description: 'Master the art of quantum-enhanced manual collection',
+    emoji: '⚡',
+    cost: { researchData: 500, quantumEnergy: 100, quantumCrystals: 10 },
+    prerequisites: ['click_amplification'],
+    effects: [
+      { type: 'click_bonus', value: 10, description: '+10 base click power' },
+    ],
+    category: 'foundation',
+  },
 
   // Energy Research
   {
@@ -70,6 +95,39 @@ export const RESEARCH_NODES: ResearchNode[] = [
     prerequisites: ['stellar_harvesting'],
     effects: [
       { type: 'energy', value: 1.0, description: '+100% energy production' },
+    ],
+    category: 'energy',
+  },
+  {
+    id: 'click_efficiency',
+    name: 'Click Efficiency',
+    description: 'Optimize click upgrade costs through advanced algorithms',
+    emoji: '🎯',
+    cost: { researchData: 2000, quantumEnergy: 1000, quantumCrystals: 50 },
+    prerequisites: ['energy_efficiency'],
+    effects: [
+      {
+        type: 'click_cost_reduction',
+        value: 0.25,
+        description: '-25% click upgrade costs',
+      },
+    ],
+    category: 'energy',
+  },
+  {
+    id: 'multi_click',
+    name: 'Multi-Click',
+    description:
+      'Quantum entanglement allows single clicks to trigger multiple times',
+    emoji: '👥',
+    cost: { researchData: 8000, quantumEnergy: 4000, quantumCrystals: 200 },
+    prerequisites: ['void_manipulation'],
+    effects: [
+      {
+        type: 'click_chance',
+        value: 0.15,
+        description: '15% chance for double clicks',
+      },
     ],
     category: 'energy',
   },
