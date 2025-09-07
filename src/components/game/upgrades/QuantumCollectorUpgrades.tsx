@@ -1,74 +1,83 @@
-import { useGameState, useGameActions } from 'src/hooks';
+import { useState } from 'react';
+import { useGameActions } from 'src/hooks';
+import { ENERGY_UPGRADES, UPGRADE_CATEGORIES } from 'src/config/upgrades';
+import UpgradeCard from '../../collectors/UpgradeCard';
 
 const QuantumCollectorUpgrades = () => {
-    const { upgrades } = useGameState();
-    const { upgradeCollectorEfficiency } = useGameActions();
+    const { buyUpgrade } = useGameActions();
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-    const efficiencyCost = Math.floor(50000 * Math.pow(2, upgrades.collectorEfficiency - 1));
+    const handleBuyUpgrade = async (upgradeId: string) => {
+        try {
+            console.log('Attempting to buy upgrade:', upgradeId);
+            await buyUpgrade(upgradeId);
+            console.log('Upgrade purchased successfully:', upgradeId);
+        } catch (error) {
+            console.error('Failed to buy upgrade:', error);
+            alert(`Failed to buy upgrade: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
+    };
+
+    const filteredUpgrades = selectedCategory === 'all'
+        ? ENERGY_UPGRADES
+        : ENERGY_UPGRADES.filter(upgrade => upgrade.category === selectedCategory);
 
     return (
         <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <span className="text-2xl mr-2">⚡</span>
-                    Energy Collector Upgrades
-                </h3>
-
-                <div className="space-y-4">
-                    {/* Collector Efficiency Upgrade */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-1">
-                                    Collector Efficiency
-                                </h4>
-                                <p className="text-gray-600 text-sm mb-2">
-                                    Increases energy production from all collectors by 10% per level
-                                </p>
-                                <div className="text-sm text-gray-500">
-                                    Current Level: {upgrades.collectorEfficiency} (+{((upgrades.collectorEfficiency - 1) * 10).toFixed(1)}% production)
-                                </div>
-                            </div>
-                            <div className="ml-4">
-                                <button
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                                    onClick={upgradeCollectorEfficiency}
-                                >
-                                    Upgrade
-                                </button>
-                                <div className="text-xs text-gray-500 mt-1 text-center">
-                                    {efficiencyCost.toLocaleString()} ⚡
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Future upgrades can be added here */}
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 opacity-50">
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-1">
-                                    Auto-Collector
-                                </h4>
-                                <p className="text-gray-600 text-sm mb-2">
-                                    Automatically collect energy every few seconds
-                                </p>
-                                <div className="text-sm text-gray-500">
-                                    Coming Soon
-                                </div>
-                            </div>
-                            <div className="ml-4">
-                                <button
-                                    className="bg-gray-400 text-white px-4 py-2 rounded-lg font-medium cursor-not-allowed"
-                                    disabled
-                                >
-                                    Locked
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {/* Header */}
+            <div className="text-center">
+                <h2 className="text-3xl font-bold text-white mb-2">⚡ Energy Upgrades</h2>
+                <p className="text-gray-300 text-lg">Enhance your energy collection capabilities</p>
             </div>
+
+            {/* Category Filter */}
+            <div className="flex flex-wrap gap-2 justify-center">
+                <button
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${selectedCategory === 'all'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        }`}
+                    onClick={() => setSelectedCategory('all')}
+                >
+                    All Upgrades
+                </button>
+                {Object.entries(UPGRADE_CATEGORIES).map(([key, category]) => (
+                    <button
+                        key={key}
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${selectedCategory === key
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
+                        onClick={() => setSelectedCategory(key)}
+                    >
+                        {category.emoji} {category.name}
+                    </button>
+                ))}
+            </div>
+
+            {/* Upgrades Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredUpgrades.map((upgrade) => (
+                    <UpgradeCard
+                        key={upgrade.id}
+                        upgrade={upgrade}
+                        onBuy={handleBuyUpgrade}
+                    />
+                ))}
+            </div>
+
+            {/* Category Description */}
+            {selectedCategory !== 'all' && (
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-600">
+                    <h3 className="text-lg font-semibold text-white mb-2">
+                        {UPGRADE_CATEGORIES[selectedCategory as keyof typeof UPGRADE_CATEGORIES]?.emoji}{' '}
+                        {UPGRADE_CATEGORIES[selectedCategory as keyof typeof UPGRADE_CATEGORIES]?.name}
+                    </h3>
+                    <p className="text-gray-300">
+                        {UPGRADE_CATEGORIES[selectedCategory as keyof typeof UPGRADE_CATEGORIES]?.description}
+                    </p>
+                </div>
+            )}
         </div>
     );
 };

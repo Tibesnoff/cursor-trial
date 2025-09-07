@@ -1,4 +1,4 @@
-import { useGameState, useGameActions, useUnlockedTabs } from 'src/hooks';
+import { useGameActions, useUnlockedTabs, useResources } from 'src/hooks';
 import { CustomNavItem, NavSubItem } from 'src/components/navigation';
 
 interface SidebarNavigationProps {
@@ -18,7 +18,7 @@ interface TabConfig {
 }
 
 const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) => {
-    const { resources } = useGameState();
+    const resources = useResources();
     const unlockedTabs = useUnlockedTabs();
     const actions = useGameActions();
 
@@ -83,21 +83,39 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
             return (resources[resource as keyof typeof resources] || 0) >= amount;
         });
 
+        // Debug logging
+        console.log(`Tab ${tab.id} status:`, {
+            hasUnlockCost: !!tab.unlockCost,
+            isUnlocked: unlockedTabs.includes(tab.id),
+            canAfford,
+            resources,
+            unlockCost: tab.unlockCost
+        });
+
         return canAfford ? 'available' : 'locked';
     };
 
     const handleTabClick = (tab: TabConfig) => {
         const status = getTabStatus(tab);
 
+        console.log(`Tab ${tab.id} clicked:`, {
+            status,
+            hasUnlockCost: !!tab.unlockCost,
+            unlockCost: tab.unlockCost
+        });
+
         if (status === 'available' && tab.unlockCost) {
             // Unlock the tab
+            console.log(`Unlocking tab ${tab.id} with cost:`, tab.unlockCost);
             actions.unlockTab(tab.id, tab.unlockCost);
             onTabChange(tab.id);
         } else if (status === 'unlocked') {
             // Switch to unlocked tab
+            console.log(`Switching to unlocked tab ${tab.id}`);
             onTabChange(tab.id);
+        } else {
+            console.log(`Tab ${tab.id} is locked, cannot click`);
         }
-        // Do nothing if locked
     };
 
     const getTabStyle = (tab: TabConfig) => {
@@ -143,6 +161,8 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
                                     emoji={tab.emoji}
                                     isActive={isActive}
                                     onClick={() => isClickable && handleTabClick(tab)}
+                                    unlockCost={tab.unlockCost}
+                                    status={status}
                                 >
                                     {subTabs.map(subTab => (
                                         <NavSubItem

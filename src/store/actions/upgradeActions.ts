@@ -1,93 +1,164 @@
-import type { GameState } from 'src/types';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import type { RootState } from '../index';
+import type { BuildingCost } from '../../types';
+import { ALL_UPGRADES } from '../../config/upgrades';
+import { incrementUpgrade, deductCost } from '../slices/gameSlice';
+import { calculateCostReduction } from '../../utils/upgradeCalculations';
 
-export const upgradeClickPower = (state: GameState) => {
-  // Tiered scaling similar to collectors: 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 100, 150, 200, 250, 300, 1000, 1500, 2000, 2500, 3000, 10000...
-  let cost: number;
-  const level = state.upgrades.clickPower;
+// Helper function to calculate upgrade cost
+const calculateUpgradeCost = (
+  upgradeId: string,
+  currentLevel: number,
+  state?: RootState
+): BuildingCost => {
+  const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+  if (!upgrade) return {};
 
-  if (level < 20) {
-    // Tier 1: 5-100 (linear +5)
-    cost = 5 + level * 5;
-  } else if (level < 40) {
-    // Tier 2: 100-2000 (linear +100)
-    cost = 100 + (level - 20) * 100;
-  } else if (level < 60) {
-    // Tier 3: 2000-4000 (linear +100)
-    cost = 2000 + (level - 40) * 100;
-  } else if (level < 80) {
-    // Tier 4: 4000-6000 (linear +100)
-    cost = 4000 + (level - 60) * 100;
-  } else {
-    // Tier 5+: 6000+ (exponential 1.1x)
-    cost = Math.floor(6000 * Math.pow(1.1, level - 80));
-  }
+  const multiplier = Math.pow(upgrade.costMultiplier, currentLevel);
+  const costReduction = state ? calculateCostReduction(state.game) : 0;
 
-  // Apply cost reduction from research
-  const finalCost = Math.floor(cost * (1 - state.upgrades.clickCostReduction));
+  const cost: BuildingCost = {};
 
-  if (state.resources.quantumEnergy >= finalCost) {
-    state.resources.quantumEnergy -= finalCost;
-    // Each upgrade adds more click power: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50...
-    const clickPowerIncrease = Math.max(
-      1,
-      Math.floor(state.upgrades.clickPower / 10) + 1
+  Object.entries(upgrade.baseCost).forEach(([resource, amount]) => {
+    if (amount) {
+      const baseCost = Math.floor(amount * multiplier);
+      const reducedCost = Math.floor(baseCost * (1 - costReduction));
+      cost[resource as keyof BuildingCost] = reducedCost;
+    }
+  });
+
+  return cost;
+};
+
+// Helper function to check if upgrade can be afforded
+const canAffordUpgrade = (
+  state: RootState,
+  upgradeId: string,
+  currentLevel: number
+): boolean => {
+  const cost = calculateUpgradeCost(upgradeId, currentLevel, state);
+  return Object.entries(cost).every(([resource, amount]) => {
+    if (!amount) return true;
+    return (
+      (state.game.resources[resource as keyof typeof state.game.resources] ||
+        0) >= amount
     );
-    state.upgrades.clickPower += clickPowerIncrease;
-  }
+  });
 };
 
-export const upgradeCollectorEfficiency = (state: GameState) => {
-  const cost = Math.floor(
-    50000 * Math.pow(2, state.upgrades.collectorEfficiency - 1)
-  );
-  if (state.resources.quantumEnergy >= cost) {
-    state.resources.quantumEnergy -= cost;
-    state.upgrades.collectorEfficiency += 1;
-  }
+// Helper function to check prerequisites
+const checkPrerequisites = (state: RootState, upgradeId: string): boolean => {
+  const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+  if (!upgrade || !upgrade.prerequisites) return true;
+
+  return upgrade.prerequisites.every(prereqId => {
+    const prereqUpgrade = ALL_UPGRADES.find(u => u.id === prereqId);
+    if (!prereqUpgrade) return false;
+
+    // Check if prerequisite is at level 1 or higher
+    if (prereqUpgrade.collectorType === 'energy') {
+      return (state.game.upgrades.energyUpgrades[prereqId] || 0) >= 1;
+    } else if (prereqUpgrade.collectorType === 'crystal') {
+      return (state.game.upgrades.crystalUpgrades[prereqId] || 0) >= 1;
+    } else if (prereqUpgrade.collectorType === 'both') {
+      return (state.game.upgrades.universalUpgrades[prereqId] || 0) >= 1;
+    }
+    return false;
+  });
 };
 
-export const upgradeCrystalClickPower = (state: GameState) => {
-  // Tiered scaling for crystals: 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 50, 80, 110, 140, 170, 500, 800, 1100, 1400, 1700, 5000...
-  let cost: number;
-  const level = state.upgrades.crystalClickPower;
+// Helper function to check max level
+const isMaxLevel = (state: RootState, upgradeId: string): boolean => {
+  const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+  if (!upgrade) return true;
 
-  if (level < 20) {
-    // Tier 1: 3-60 (linear +3)
-    cost = 3 + level * 3;
-  } else if (level < 40) {
-    // Tier 2: 60-1200 (linear +60)
-    cost = 60 + (level - 20) * 60;
-  } else if (level < 60) {
-    // Tier 3: 1200-2400 (linear +60)
-    cost = 1200 + (level - 40) * 60;
-  } else if (level < 80) {
-    // Tier 4: 2400-3600 (linear +60)
-    cost = 2400 + (level - 60) * 60;
-  } else {
-    // Tier 5+: 3600+ (exponential 1.1x)
-    cost = Math.floor(3600 * Math.pow(1.1, level - 80));
-  }
-
-  // Apply cost reduction from research
-  const finalCost = Math.floor(cost * (1 - state.upgrades.clickCostReduction));
-
-  if (state.resources.quantumCrystals >= finalCost) {
-    state.resources.quantumCrystals -= finalCost;
-    // Each upgrade adds more click power: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50...
-    const clickPowerIncrease = Math.max(
-      1,
-      Math.floor(state.upgrades.crystalClickPower / 10) + 1
-    );
-    state.upgrades.crystalClickPower += clickPowerIncrease;
-  }
+  const currentLevel = getCurrentUpgradeLevel(state, upgradeId);
+  return currentLevel >= upgrade.maxLevel;
 };
 
-export const upgradeCrystalEfficiency = (state: GameState) => {
-  const cost = Math.floor(
-    10000 * Math.pow(1.5, state.upgrades.crystalEfficiency - 1)
-  );
-  if (state.resources.quantumCrystals >= cost) {
-    state.resources.quantumCrystals -= cost;
-    state.upgrades.crystalEfficiency += 1;
+// Helper function to get current upgrade level
+const getCurrentUpgradeLevel = (
+  state: RootState,
+  upgradeId: string
+): number => {
+  const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+  if (!upgrade) return 0;
+
+  if (upgrade.collectorType === 'energy') {
+    return state.game.upgrades.energyUpgrades[upgradeId] || 0;
+  } else if (upgrade.collectorType === 'crystal') {
+    return state.game.upgrades.crystalUpgrades[upgradeId] || 0;
+  } else if (upgrade.collectorType === 'both') {
+    return state.game.upgrades.universalUpgrades[upgradeId] || 0;
   }
+  return 0;
+};
+
+// Action to buy an upgrade
+export const buyUpgrade = createAsyncThunk(
+  'upgrades/buyUpgrade',
+  async (upgradeId: string, { getState, dispatch }) => {
+    const state = getState() as RootState;
+
+    // Check if upgrade exists
+    const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+    if (!upgrade) {
+      throw new Error(`Upgrade ${upgradeId} not found`);
+    }
+
+    const currentLevel = getCurrentUpgradeLevel(state, upgradeId);
+
+    // Check if already at max level
+    if (isMaxLevel(state, upgradeId)) {
+      throw new Error(`Upgrade ${upgradeId} is already at maximum level`);
+    }
+
+    // Check prerequisites
+    if (!checkPrerequisites(state, upgradeId)) {
+      throw new Error(`Prerequisites not met for upgrade ${upgradeId}`);
+    }
+
+    // Check if can afford
+    if (!canAffordUpgrade(state, upgradeId, currentLevel)) {
+      throw new Error(`Cannot afford upgrade ${upgradeId}`);
+    }
+
+    // Deduct cost and increment upgrade
+    const cost = calculateUpgradeCost(upgradeId, currentLevel, state);
+    dispatch(deductCost({ cost }));
+    dispatch(incrementUpgrade(upgradeId));
+
+    return { upgradeId, newLevel: currentLevel + 1 };
+  }
+);
+
+// Note: incrementUpgrade and deductCost are imported from gameSlice
+
+// Action to get upgrade cost
+export const getUpgradeCost = createAction<{
+  upgradeId: string;
+  cost: BuildingCost;
+}>('upgrades/getUpgradeCost');
+
+// Action to check if upgrade can be bought
+export const canBuyUpgrade = createAction<{
+  upgradeId: string;
+  canBuy: boolean;
+}>('upgrades/canBuyUpgrade');
+
+// Legacy upgrade actions (kept for compatibility)
+export const upgradeClickPower = createAction<BuildingCost>(
+  'upgrades/upgradeClickPower'
+);
+export const upgradeCrystalClickPower = createAction<BuildingCost>(
+  'upgrades/upgradeCrystalClickPower'
+);
+
+// Export helper functions for use in components
+export {
+  calculateUpgradeCost,
+  canAffordUpgrade,
+  checkPrerequisites,
+  isMaxLevel,
+  getCurrentUpgradeLevel,
 };

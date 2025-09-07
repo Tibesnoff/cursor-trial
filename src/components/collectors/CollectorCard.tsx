@@ -66,7 +66,12 @@ const CollectorCard: React.FC<CollectorCardProps> = ({
 
             {/* Build Button */}
             <Button
-                onClick={onBuy}
+                onClick={() => {
+                    console.log('CollectorCard buy button clicked:', collector.id);
+                    console.log('Affordable:', affordable);
+                    console.log('Cost:', actualCost);
+                    onBuy();
+                }}
                 variant={affordable ? "primary" : "secondary"}
                 size="sm"
                 className="w-full"

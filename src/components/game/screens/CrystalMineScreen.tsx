@@ -1,7 +1,8 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { CRYSTAL_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
-import { calculateCrystalClickPowerIncrease } from 'src/utils/clickCalculations';
+import { calculateCrystalClickPower, calculateCollectorEfficiency } from 'src/utils/upgradeCalculations';
+import { calculateUpgradeCost, getCurrentUpgradeLevel } from 'src/store/actions/upgradeActions';
 import CrystalMineUpgrades from '../upgrades/CrystalMineUpgrades';
 
 interface CrystalMineScreenProps {
@@ -10,7 +11,7 @@ interface CrystalMineScreenProps {
 
 const CrystalMineScreen = ({ activeSubTab = 'collectors' }: CrystalMineScreenProps) => {
     const { crystalCollectors, upgrades } = useGameState();
-    const { clickCrystals, buyBasicMine, buyQuantumDrill, buyStellarExtractor, buyVoidHarvester, buyDimensionalMine, buyCosmicRefinery, upgradeCrystalClickPower } = useGameActions();
+    const { clickCrystals, buyBasicMine, buyQuantumDrill, buyStellarExtractor, buyVoidHarvester, buyDimensionalMine, buyCosmicRefinery, buyUpgrade } = useGameActions();
 
     // Calculate crystal production from collectors
     const calculateCrystalProduction = () => {
@@ -22,40 +23,23 @@ const CrystalMineScreen = ({ activeSubTab = 'collectors' }: CrystalMineScreenPro
             crystalCollectors.dimensionalMines * 5000 +
             crystalCollectors.cosmicRefineries * 50000;
 
-        // Apply crystal efficiency upgrade
-        const efficiencyMultiplier = 1 + upgrades.crystalEfficiency * 0.1;
+        // Apply crystal efficiency from new upgrade system
+        const efficiencyMultiplier = calculateCollectorEfficiency({ upgrades } as any, 'crystal');
         return Math.floor(production * efficiencyMultiplier);
     };
 
-    // Click power is now just from upgrades
-    const clickPower = upgrades.crystalClickPower;
+    // Click power from new upgrade system
+    const clickPower = calculateCrystalClickPower({ upgrades } as any);
 
     const crystalProduction = calculateCrystalProduction();
 
-    // Calculate click upgrade cost (matches upgradeActions.ts tiered scaling)
-    const calculateCrystalClickUpgradeCost = (level: number) => {
-        if (level < 20) {
-            return 3 + level * 3;
-        } else if (level < 40) {
-            return 60 + (level - 20) * 60;
-        } else if (level < 60) {
-            return 1200 + (level - 40) * 60;
-        } else if (level < 80) {
-            return 2400 + (level - 60) * 60;
-        } else {
-            return Math.floor(3600 * Math.pow(1.1, level - 80));
-        }
-    };
+    // Calculate click upgrade cost using new upgrade system
+    const clickUpgradeId = 'crystal_click_boost';
+    const currentClickUpgradeLevel = getCurrentUpgradeLevel({ game: { upgrades } } as any, clickUpgradeId);
+    const clickUpgradeCost = calculateUpgradeCost(clickUpgradeId, currentClickUpgradeLevel, { game: { upgrades } } as any);
 
-    const baseCost = calculateCrystalClickUpgradeCost(upgrades.crystalClickPower);
-    const finalCost = Math.floor(baseCost * (1 - upgrades.clickCostReduction));
-
-    const clickUpgradeCost = {
-        quantumCrystals: finalCost
-    };
-
-    // Calculate crystal click power increase for next upgrade
-    const clickPowerIncrease = calculateCrystalClickPowerIncrease(upgrades.crystalClickPower);
+    // Calculate click power increase for next upgrade (always +1 for crystal_click_boost)
+    const clickPowerIncrease = 1;
 
     const buyActions = {
         basicMines: buyBasicMine,
@@ -78,11 +62,12 @@ const CrystalMineScreen = ({ activeSubTab = 'collectors' }: CrystalMineScreenPro
                     clickPower={clickPower}
                     buyActions={buyActions}
                     onCollect={clickCrystals}
-                    onUpgradeClick={upgradeCrystalClickPower}
+                    onUpgradeClick={() => buyUpgrade(clickUpgradeId)}
                     resourceEmoji="💎"
                     resourceName="Crystals"
                     clickUpgradeCost={clickUpgradeCost}
                     clickPowerIncrease={clickPowerIncrease}
+                    collectorType="crystal"
                 />
             )}
 

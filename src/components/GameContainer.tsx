@@ -30,7 +30,7 @@ const GameContainer = () => {
     // Passive resource generation (crystals, research, defense)
     useEffect(() => {
         const interval = setInterval(() => {
-            dispatch(generatePassiveEnergy());
+            dispatch(generatePassiveEnergy(undefined));
         }, 1000); // Generate resources every second
 
         return () => clearInterval(interval);
@@ -39,7 +39,7 @@ const GameContainer = () => {
     // Energy generation from collectors
     useEffect(() => {
         const interval = setInterval(() => {
-            dispatch(generateEnergyFromCollectors());
+            dispatch(generateEnergyFromCollectors(undefined));
         }, 1000); // Generate energy every second
 
         return () => clearInterval(interval);
@@ -48,7 +48,7 @@ const GameContainer = () => {
     // Play time tracking
     useEffect(() => {
         const interval = setInterval(() => {
-            dispatch(updatePlayTime());
+            dispatch(updatePlayTime(undefined));
         }, 1000);
 
         return () => clearInterval(interval);

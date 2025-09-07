@@ -3,16 +3,21 @@ import type { GameState } from '../../types';
 import * as collectorActions from '../actions/collectorActions';
 import * as researchActions from '../actions/researchActions';
 import * as defenseActions from '../actions/defenseActions';
-import * as upgradeActions from '../actions/upgradeActions';
+import { buyUpgrade } from '../actions/upgradeActions';
+import { ALL_UPGRADES } from '../../config/upgrades';
 import {
   generatePassiveEnergy as generatePassiveEnergyLogic,
   generateEnergyFromCollectors as generateEnergyFromCollectorsLogic,
   updatePlayTime as updatePlayTimeLogic,
 } from '../logic/gameLogic';
+import {
+  calculateEnergyClickPower,
+  calculateCrystalClickPower,
+} from '../../utils/upgradeCalculations';
 
 const initialState: GameState = {
   resources: {
-    quantumEnergy: 0,
+    quantumEnergy: 30,
     quantumCrystals: 0,
     researchData: 0,
     defensePoints: 0,
@@ -50,6 +55,7 @@ const initialState: GameState = {
     communicationArrays: 0,
   },
   upgrades: {
+    // Legacy upgrades (kept for compatibility)
     clickPower: 1,
     collectorEfficiency: 1,
     crystalClickPower: 1,
@@ -59,6 +65,10 @@ const initialState: GameState = {
     clickBonus: 0,
     clickCostReduction: 0,
     clickChance: 0,
+    // New upgrade system
+    energyUpgrades: {},
+    crystalUpgrades: {},
+    universalUpgrades: {},
   },
   researchTree: {
     unlocked: ['basic_research'],
@@ -80,13 +90,13 @@ const gameSlice = createSlice({
   reducers: {
     // Core Actions
     clickEnergy: state => {
-      // Calculate energy gained from click power + research bonuses
-      let energyGained = state.upgrades.clickPower + state.upgrades.clickBonus;
+      // Calculate energy gained from new upgrade system
+      let energyGained = calculateEnergyClickPower(state);
 
-      // Apply click multiplier from research
+      // Apply click multiplier from research (legacy)
       energyGained *= state.upgrades.clickMultiplier;
 
-      // Apply click chance (multi-click)
+      // Apply click chance (multi-click) (legacy)
       if (
         state.upgrades.clickChance > 0 &&
         Math.random() < state.upgrades.clickChance
@@ -94,7 +104,7 @@ const gameSlice = createSlice({
         energyGained *= 2; // Double click
       }
 
-      // Add energy collector click power bonuses
+      // Add energy collector click power bonuses (legacy)
       energyGained += state.energyCollectors.basicCollectors * 1;
       energyGained += state.energyCollectors.quantumReactors * 2;
       energyGained += state.energyCollectors.stellarForges * 5;
@@ -106,14 +116,13 @@ const gameSlice = createSlice({
     },
 
     clickCrystals: state => {
-      // Calculate crystals gained from click power + research bonuses
-      let crystalGained =
-        state.upgrades.crystalClickPower + state.upgrades.clickBonus;
+      // Calculate crystals gained from new upgrade system
+      let crystalGained = calculateCrystalClickPower(state);
 
-      // Apply click multiplier from research
+      // Apply click multiplier from research (legacy)
       crystalGained *= state.upgrades.clickMultiplier;
 
-      // Apply click chance (multi-click)
+      // Apply click chance (multi-click) (legacy)
       if (
         state.upgrades.clickChance > 0 &&
         Math.random() < state.upgrades.clickChance
@@ -121,7 +130,7 @@ const gameSlice = createSlice({
         crystalGained *= 2; // Double click
       }
 
-      // Add crystal collector click power bonuses
+      // Add crystal collector click power bonuses (legacy)
       crystalGained += state.crystalCollectors.basicMines * 1;
       crystalGained += state.crystalCollectors.quantumDrills * 2;
       crystalGained += state.crystalCollectors.stellarExtractors * 5;
@@ -182,6 +191,36 @@ const gameSlice = createSlice({
       Object.assign(state, initialState);
     },
 
+    // New Upgrade System
+    incrementUpgrade: (state, action) => {
+      const upgradeId = action.payload;
+      const upgrade = ALL_UPGRADES.find(u => u.id === upgradeId);
+
+      if (upgrade) {
+        if (upgrade.collectorType === 'energy') {
+          state.upgrades.energyUpgrades[upgradeId] =
+            (state.upgrades.energyUpgrades[upgradeId] || 0) + 1;
+        } else if (upgrade.collectorType === 'crystal') {
+          state.upgrades.crystalUpgrades[upgradeId] =
+            (state.upgrades.crystalUpgrades[upgradeId] || 0) + 1;
+        } else if (upgrade.collectorType === 'both') {
+          state.upgrades.universalUpgrades[upgradeId] =
+            (state.upgrades.universalUpgrades[upgradeId] || 0) + 1;
+        }
+      }
+    },
+
+    deductCost: (state, action) => {
+      const { cost } = action.payload;
+      Object.entries(cost).forEach(([resource, amount]) => {
+        if (amount && typeof amount === 'number') {
+          const resourceKey = resource as keyof typeof state.resources;
+          state.resources[resourceKey] =
+            (state.resources[resourceKey] || 0) - amount;
+        }
+      });
+    },
+
     // Energy Collector Actions
     buyBasicCollector: collectorActions.buyBasicCollector,
     buyQuantumReactor: collectorActions.buyQuantumReactor,
@@ -210,11 +249,19 @@ const gameSlice = createSlice({
     buyDefenseSystem: defenseActions.buyDefenseSystem,
     buyCommunicationArray: defenseActions.buyCommunicationArray,
 
-    // Upgrade Actions
-    upgradeClickPower: upgradeActions.upgradeClickPower,
-    upgradeCollectorEfficiency: upgradeActions.upgradeCollectorEfficiency,
-    upgradeCrystalClickPower: upgradeActions.upgradeCrystalClickPower,
-    upgradeCrystalEfficiency: upgradeActions.upgradeCrystalEfficiency,
+    // Legacy Upgrade Actions (kept for compatibility)
+    upgradeClickPower: () => {
+      // Legacy action - replaced by new upgrade system
+    },
+    upgradeCollectorEfficiency: () => {
+      // Legacy action - replaced by new upgrade system
+    },
+    upgradeCrystalClickPower: () => {
+      // Legacy action - replaced by new upgrade system
+    },
+    upgradeCrystalEfficiency: () => {
+      // Legacy action - replaced by new upgrade system
+    },
 
     // Research Actions
     unlockResearchNode: researchActions.unlockResearchNode,
@@ -225,9 +272,22 @@ const gameSlice = createSlice({
     generateEnergyFromCollectors: generateEnergyFromCollectorsLogic,
     updatePlayTime: updatePlayTimeLogic,
   },
+  extraReducers: builder => {
+    builder
+      .addCase(buyUpgrade.fulfilled, (_, action) => {
+        // The buyUpgrade action handles the cost deduction and upgrade increment internally
+        // This case is just for handling the fulfilled state if needed
+        console.log(
+          `Upgrade ${action.payload.upgradeId} purchased successfully`
+        );
+      })
+      .addCase(buyUpgrade.rejected, (_, action) => {
+        // Handle errors if needed
+        console.error('Failed to buy upgrade:', action.error.message);
+      });
+  },
 });
 
-export const { actions } = gameSlice;
 export const {
   clickEnergy,
   clickCrystals,
@@ -259,6 +319,9 @@ export const {
   upgradeCollectorEfficiency,
   upgradeCrystalClickPower,
   upgradeCrystalEfficiency,
+  // New Upgrade System
+  incrementUpgrade,
+  deductCost,
   // Research Actions
   unlockResearchNode,
   completeResearchNode,
@@ -276,4 +339,5 @@ export const {
   resetGameState,
 } = gameSlice.actions;
 
+export const { actions } = gameSlice;
 export default gameSlice.reducer;

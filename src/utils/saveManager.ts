@@ -70,6 +70,10 @@ export function serializeGameState(state: GameState): string {
       cb: state.upgrades.clickBonus,
       ccr: state.upgrades.clickCostReduction,
       cc: state.upgrades.clickChance,
+      // New upgrade system
+      eu: state.upgrades.energyUpgrades,
+      cu: state.upgrades.crystalUpgrades,
+      uu: state.upgrades.universalUpgrades,
     },
     // Research Tree
     rt: {
@@ -156,6 +160,10 @@ export function deserializeGameState(encodedData: string): GameState | null {
         clickBonus: saveData.u.cb || 0,
         clickCostReduction: saveData.u.ccr || 0,
         clickChance: saveData.u.cc || 0,
+        // New upgrade system
+        energyUpgrades: saveData.u.eu || {},
+        crystalUpgrades: saveData.u.cu || {},
+        universalUpgrades: saveData.u.uu || {},
       },
       researchTree: {
         unlocked: saveData.rt.u || ['basic_research'],

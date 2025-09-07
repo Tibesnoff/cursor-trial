@@ -1,6 +1,7 @@
 import { useGameState } from 'src/hooks';
 import type { CollectorConfig, BuildingCost } from 'src/types';
 import { CollectSection, ProductionSection, CollectorsGrid } from 'src/components/collectors';
+import { calculateCollectorEfficiency, calculateCostReduction } from 'src/utils/upgradeCalculations';
 
 interface CollectorScreenProps {
     title: string;
@@ -16,6 +17,7 @@ interface CollectorScreenProps {
     resourceName: string;
     clickUpgradeCost?: BuildingCost;
     clickPowerIncrease?: number;
+    collectorType: 'energy' | 'crystal';
 }
 
 const CollectorScreen = ({
@@ -32,17 +34,21 @@ const CollectorScreen = ({
     resourceName,
     clickUpgradeCost,
     clickPowerIncrease = 1,
+    collectorType,
 }: CollectorScreenProps) => {
     const { resources, upgrades } = useGameState();
 
     const calculateActualCost = (collector: CollectorConfig) => {
         const count = collectorCounts[collector.id] || 0;
         const multiplier = Math.pow(collector.costMultiplier, count);
+        const costReduction = calculateCostReduction({ upgrades } as any);
 
         const actualCost: Record<string, number> = {};
         Object.entries(collector.baseCost).forEach(([resource, amount]) => {
             if (amount) {
-                actualCost[resource] = Math.floor(amount * multiplier);
+                const baseCost = Math.floor(amount * multiplier);
+                const reducedCost = Math.floor(baseCost * (1 - costReduction));
+                actualCost[resource] = reducedCost;
             }
         });
         return actualCost;
@@ -89,7 +95,7 @@ const CollectorScreen = ({
                     resourceEmoji={resourceEmoji}
                     production={production}
                     clickPower={clickPower}
-                    efficiency={(upgrades.collectorEfficiency - 1) * 100}
+                    efficiency={(calculateCollectorEfficiency({ upgrades } as any, collectorType) - 1) * 100}
                 />
             </div>
 

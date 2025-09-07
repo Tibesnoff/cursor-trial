@@ -1,7 +1,8 @@
 import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
-import { calculateClickPowerIncrease } from 'src/utils/clickCalculations';
+import { calculateEnergyClickPower, calculateCollectorEfficiency } from 'src/utils/upgradeCalculations';
+import { calculateUpgradeCost, getCurrentUpgradeLevel } from 'src/store/actions/upgradeActions';
 import QuantumCollectorUpgrades from '../upgrades/QuantumCollectorUpgrades';
 
 interface QuantumCollectorScreenProps {
@@ -10,7 +11,7 @@ interface QuantumCollectorScreenProps {
 
 const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollectorScreenProps) => {
     const { energyCollectors, upgrades } = useGameState();
-    const { clickEnergy, buyBasicCollector, buyQuantumReactor, buyStellarForge, buyVoidExtractor, buyDimensionalRift, buyCosmicGenerator, upgradeClickPower } = useGameActions();
+    const { clickEnergy, buyBasicCollector, buyQuantumReactor, buyStellarForge, buyVoidExtractor, buyDimensionalRift, buyCosmicGenerator, buyUpgrade } = useGameActions();
 
     // Calculate energy production from collectors
     const calculateEnergyProduction = () => {
@@ -22,40 +23,23 @@ const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollecto
             energyCollectors.dimensionalRifts * 5000 +
             energyCollectors.cosmicGenerators * 50000;
 
-        // Apply collector efficiency upgrade
-        const efficiencyMultiplier = 1 + upgrades.collectorEfficiency * 0.1;
+        // Apply collector efficiency from new upgrade system
+        const efficiencyMultiplier = calculateCollectorEfficiency({ upgrades } as any, 'energy');
         return Math.floor(production * efficiencyMultiplier);
     };
 
-    // Click power is now just from upgrades
-    const clickPower = upgrades.clickPower;
+    // Click power from new upgrade system
+    const clickPower = calculateEnergyClickPower({ upgrades } as any);
 
     const energyProduction = calculateEnergyProduction();
 
-    // Calculate click upgrade cost (matches upgradeActions.ts tiered scaling)
-    const calculateClickUpgradeCost = (level: number) => {
-        if (level < 20) {
-            return 5 + level * 5;
-        } else if (level < 40) {
-            return 100 + (level - 20) * 100;
-        } else if (level < 60) {
-            return 2000 + (level - 40) * 100;
-        } else if (level < 80) {
-            return 4000 + (level - 60) * 100;
-        } else {
-            return Math.floor(6000 * Math.pow(1.1, level - 80));
-        }
-    };
+    // Calculate click upgrade cost using new upgrade system
+    const clickUpgradeId = 'energy_click_boost';
+    const currentClickUpgradeLevel = getCurrentUpgradeLevel({ game: { upgrades } } as any, clickUpgradeId);
+    const clickUpgradeCost = calculateUpgradeCost(clickUpgradeId, currentClickUpgradeLevel, { game: { upgrades } } as any);
 
-    const baseCost = calculateClickUpgradeCost(upgrades.clickPower);
-    const finalCost = Math.floor(baseCost * (1 - upgrades.clickCostReduction));
-
-    const clickUpgradeCost = {
-        quantumEnergy: finalCost
-    };
-
-    // Calculate click power increase for next upgrade
-    const clickPowerIncrease = calculateClickPowerIncrease(upgrades.clickPower);
+    // Calculate click power increase for next upgrade (always +1 for energy_click_boost)
+    const clickPowerIncrease = 1;
 
     const buyActions = {
         basicCollectors: buyBasicCollector,
@@ -78,11 +62,12 @@ const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollecto
                     clickPower={clickPower}
                     buyActions={buyActions}
                     onCollect={clickEnergy}
-                    onUpgradeClick={upgradeClickPower}
+                    onUpgradeClick={() => buyUpgrade(clickUpgradeId)}
                     resourceEmoji="⚡"
                     resourceName="Energy"
                     clickUpgradeCost={clickUpgradeCost}
                     clickPowerIncrease={clickPowerIncrease}
+                    collectorType="energy"
                 />
             )}
 

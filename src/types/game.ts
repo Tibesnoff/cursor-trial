@@ -38,6 +38,7 @@ export interface GameState {
     communicationArrays: number;
   };
   upgrades: {
+    // Legacy upgrades (kept for compatibility)
     clickPower: number;
     collectorEfficiency: number;
     crystalClickPower: number;
@@ -47,6 +48,10 @@ export interface GameState {
     clickBonus: number;
     clickCostReduction: number;
     clickChance: number;
+    // New upgrade system
+    energyUpgrades: Record<string, number>;
+    crystalUpgrades: Record<string, number>;
+    universalUpgrades: Record<string, number>;
   };
   researchTree: {
     unlocked: string[];
