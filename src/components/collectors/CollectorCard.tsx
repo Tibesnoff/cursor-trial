@@ -1,15 +1,15 @@
 import React from 'react';
 import { Button, Card } from 'src/components/ui';
-import type { CollectorConfig } from 'src/types';
+import type { CollectorConfig, BuildingCost } from 'src/types';
 
 interface CollectorCardProps {
     collector: CollectorConfig;
     count: number;
-    actualCost: any;
+    actualCost: BuildingCost;
     affordable: boolean;
     resourceEmoji: string;
     onBuy: () => void;
-    formatCost: (cost: any) => string;
+    formatCost: (cost: BuildingCost) => string;
 }
 
 const CollectorCard: React.FC<CollectorCardProps> = ({
@@ -26,8 +26,8 @@ const CollectorCard: React.FC<CollectorCardProps> = ({
     return (
         <Card
             className={`p-4 border transition-all duration-200 hover:scale-105 ${affordable
-                    ? 'border-green-500/50 hover:border-green-400/70 bg-green-900/10'
-                    : 'border-gray-600/50 bg-gray-900/10'
+                ? 'border-green-500/50 hover:border-green-400/70 bg-green-900/10'
+                : 'border-gray-600/50 bg-gray-900/10'
                 }`}
         >
             {/* Collector Header */}

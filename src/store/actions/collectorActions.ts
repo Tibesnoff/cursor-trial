@@ -1,8 +1,11 @@
-import type { GameState } from '../../types';
+import type { GameState, BuildingCost } from '../../types';
 import { ENERGY_COLLECTORS, CRYSTAL_COLLECTORS } from '../../config';
 
 // Helper functions for cost checking and deduction
-const canAffordCost = (state: GameState, cost: any): boolean => {
+const canAffordCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+): boolean => {
   return Object.entries(cost).every(([resource, amount]) => {
     if (!amount) return true;
     return (
@@ -12,7 +15,10 @@ const canAffordCost = (state: GameState, cost: any): boolean => {
   });
 };
 
-const deductCost = (state: GameState, cost: any) => {
+const deductCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+) => {
   Object.entries(cost).forEach(([resource, amount]) => {
     if (amount) {
       state.resources[resource as keyof typeof state.resources] -=
@@ -22,9 +28,12 @@ const deductCost = (state: GameState, cost: any) => {
 };
 
 // Helper function to calculate actual cost based on current count
-const calculateActualCost = (collector: any, currentCount: number) => {
+const calculateActualCost = (
+  collector: { costMultiplier: number; baseCost: BuildingCost },
+  currentCount: number
+) => {
   const multiplier = Math.pow(collector.costMultiplier, currentCount);
-  const actualCost: any = {};
+  const actualCost: Record<string, number> = {};
   Object.entries(collector.baseCost).forEach(([resource, amount]) => {
     if (amount && typeof amount === 'number') {
       actualCost[resource] = Math.floor(amount * multiplier);

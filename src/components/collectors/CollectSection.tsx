@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button } from 'src/components/ui';
+import type { BuildingCost } from 'src/types';
 
 interface CollectSectionProps {
     resourceEmoji: string;
     resourceName: string;
-    clickUpgradeCost: any;
+    clickUpgradeCost: BuildingCost;
     clickPowerIncrease: number;
-    canAfford: (cost: any) => boolean;
-    formatCost: (cost: any) => string;
+    canAfford: (cost: BuildingCost) => boolean;
+    formatCost: (cost: BuildingCost) => string;
     onCollect: () => void;
     onUpgradeClick: () => void;
 }

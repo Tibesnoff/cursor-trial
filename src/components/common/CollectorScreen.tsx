@@ -1,5 +1,5 @@
 import { useGameState } from 'src/hooks';
-import type { CollectorConfig } from 'src/types';
+import type { CollectorConfig, BuildingCost } from 'src/types';
 import { CollectSection, ProductionSection, CollectorsGrid } from 'src/components/collectors';
 
 interface CollectorScreenProps {
@@ -14,7 +14,7 @@ interface CollectorScreenProps {
     onUpgradeClick: () => void;
     resourceEmoji: string;
     resourceName: string;
-    clickUpgradeCost?: any;
+    clickUpgradeCost?: BuildingCost;
     clickPowerIncrease?: number;
 }
 
@@ -39,7 +39,7 @@ const CollectorScreen = ({
         const count = collectorCounts[collector.id] || 0;
         const multiplier = Math.pow(collector.costMultiplier, count);
 
-        const actualCost: any = {};
+        const actualCost: Record<string, number> = {};
         Object.entries(collector.baseCost).forEach(([resource, amount]) => {
             if (amount) {
                 actualCost[resource] = Math.floor(amount * multiplier);
@@ -48,14 +48,14 @@ const CollectorScreen = ({
         return actualCost;
     };
 
-    const canAfford = (cost: any) => {
+    const canAfford = (cost: BuildingCost) => {
         return Object.entries(cost).every(([resource, amount]) => {
             if (!amount) return true;
             return (resources[resource as keyof typeof resources] || 0) >= (amount as number);
         });
     };
 
-    const formatCost = (cost: any) => {
+    const formatCost = (cost: BuildingCost) => {
         const parts = [];
         if (cost.quantumEnergy) parts.push(`${cost.quantumEnergy.toLocaleString()} ⚡`);
         if (cost.quantumCrystals) parts.push(`${cost.quantumCrystals.toLocaleString()} 💎`);
@@ -77,7 +77,7 @@ const CollectorScreen = ({
                 <CollectSection
                     resourceEmoji={resourceEmoji}
                     resourceName={resourceName}
-                    clickUpgradeCost={clickUpgradeCost}
+                    clickUpgradeCost={clickUpgradeCost || {}}
                     clickPowerIncrease={clickPowerIncrease}
                     canAfford={canAfford}
                     formatCost={formatCost}

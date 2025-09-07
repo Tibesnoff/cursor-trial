@@ -1,12 +1,13 @@
 import React from 'react';
+import type { BuildingCost } from 'src/types';
 
 interface CostDisplayProps {
-    cost: any;
+    cost: BuildingCost;
     className?: string;
 }
 
 const CostDisplay: React.FC<CostDisplayProps> = ({ cost, className = "" }) => {
-    const formatCost = (cost: any) => {
+    const formatCost = (cost: BuildingCost) => {
         const parts = [];
         if (cost.quantumEnergy) parts.push(`${cost.quantumEnergy.toLocaleString()} ⚡`);
         if (cost.quantumCrystals) parts.push(`${cost.quantumCrystals.toLocaleString()} 💎`);

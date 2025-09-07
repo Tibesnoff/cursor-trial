@@ -1,0 +1,9 @@
+/* Custom styles for dropdown buttons */
+.dropdown-button {
+  border-radius: 0 !important;
+}
+
+.dropdown-button:last-child {
+  border-top-right-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
+}

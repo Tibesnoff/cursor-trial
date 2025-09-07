@@ -5,9 +5,8 @@ import {
     generateEnergyFromCollectors,
     updatePlayTime,
 } from 'src/store/slices/gameSlice';
-import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen } from 'src/components/game';
+import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen, MiscScreen } from 'src/components/game';
 import SidebarNavigation from 'src/components/SidebarNavigation';
-import StatisticsPanel from 'src/components/StatisticsPanel';
 import { StickyResourceBar } from 'src/components/common';
 import { useAutoSave } from 'src/hooks/useAutoSave';
 import { loadFromLocalStorage } from 'src/utils/saveManager';
@@ -57,18 +56,42 @@ const GameContainer = () => {
 
     const renderActiveTab = () => {
         switch (activeTab) {
+            // Quantum Collector tabs
             case 'clicker':
-                return <QuantumCollectorScreen />;
+            case 'clicker-collectors':
+                return <QuantumCollectorScreen activeSubTab="collectors" />;
+            case 'clicker-upgrades':
+                return <QuantumCollectorScreen activeSubTab="upgrades" />;
+
+            // Crystal Mine tabs
             case 'crystals':
-                return <CrystalMineScreen />;
+            case 'crystals-collectors':
+                return <CrystalMineScreen activeSubTab="collectors" />;
+            case 'crystals-upgrades':
+                return <CrystalMineScreen activeSubTab="upgrades" />;
+
+            // Science tabs
             case 'science':
-                return <ScienceScreen />;
+            case 'science-research':
+                return <ScienceScreen activeSubTab="research" />;
+            case 'science-production':
+                return <ScienceScreen activeSubTab="production" />;
+
+            // Defense tab
             case 'defense':
                 return <DefenseScreen />;
-            case 'stats':
-                return <StatisticsPanel />;
+
+            // Misc tabs
+            case 'misc':
+            case 'misc-analytics':
+                return <MiscScreen activeSubTab="analytics" />;
+            case 'misc-settings':
+                return <MiscScreen activeSubTab="settings" />;
+            case 'misc-achievements':
+                return <MiscScreen activeSubTab="achievements" />;
+
             default:
-                return <QuantumCollectorScreen />;
+                return <QuantumCollectorScreen activeSubTab="collectors" />;
         }
     };
 

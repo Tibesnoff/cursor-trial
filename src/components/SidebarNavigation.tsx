@@ -1,4 +1,5 @@
 import { useGameState, useGameActions, useUnlockedTabs } from 'src/hooks';
+import CustomNavItem, { NavSubItem } from 'src/components/common/CustomNavItem';
 
 interface SidebarNavigationProps {
     activeTab: string;
@@ -41,8 +42,37 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
             emoji: '🛡️',
             unlockCost: { quantumEnergy: 1000000, quantumCrystals: 50000, researchData: 1000 }
         },
-        { id: 'stats', name: 'Analytics', emoji: '📊' }, // Always unlocked
+        { id: 'misc', name: 'Misc', emoji: '📋' }, // Always unlocked
     ];
+
+    // Define sub-tabs for each main tab
+    const getSubTabs = (tabId: string) => {
+        switch (tabId) {
+            case 'clicker':
+                return [
+                    { id: 'clicker-collectors', name: 'Collectors', emoji: '⚡' },
+                    { id: 'clicker-upgrades', name: 'Upgrades', emoji: '⬆️' },
+                ];
+            case 'crystals':
+                return [
+                    { id: 'crystals-collectors', name: 'Collectors', emoji: '💎' },
+                    { id: 'crystals-upgrades', name: 'Upgrades', emoji: '⬆️' },
+                ];
+            case 'science':
+                return [
+                    { id: 'science-research', name: 'Research Tree', emoji: '🌳' },
+                    { id: 'science-production', name: 'Production', emoji: '🏭' },
+                ];
+            case 'misc':
+                return [
+                    { id: 'misc-analytics', name: 'Analytics', emoji: '📊' },
+                    { id: 'misc-settings', name: 'Settings', emoji: '⚙️' },
+                    { id: 'misc-achievements', name: 'Achievements', emoji: '🏆' },
+                ];
+            default:
+                return [];
+        }
+    };
 
     const getTabStatus = (tab: TabConfig) => {
         if (!tab.unlockCost) return 'unlocked'; // Always unlocked tabs
@@ -87,17 +117,7 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
         }
     };
 
-    const formatCost = (cost: any) => {
-        return Object.entries(cost)
-            .map(([resource, amount]) => {
-                const emojiMap: Record<string, string> = {
-                    quantumEnergy: '⚡',
-                    quantumCrystals: '💎',
-                    researchData: '🧪',
-                };
-                return `${amount} ${emojiMap[resource] || ''}`;
-            });
-    };
+    // Removed unused formatCost function
 
     return (
         <>
@@ -114,35 +134,27 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
                         {tabs.map(tab => {
                             const status = getTabStatus(tab);
                             const isClickable = status !== 'locked';
+                            const subTabs = getSubTabs(tab.id);
+                            const isActive = activeTab.startsWith(tab.id);
 
                             return (
-                                <button
+                                <CustomNavItem
                                     key={tab.id}
+                                    label={tab.name}
+                                    emoji={tab.emoji}
+                                    isActive={isActive}
                                     onClick={() => isClickable && handleTabClick(tab)}
-                                    disabled={!isClickable}
-                                    className={`w-full text-left py-3 px-4 rounded-lg font-semibold transition-all ${getTabStyle(tab)}`}
                                 >
-                                    <div className="flex items-center space-x-3">
-                                        <span className="text-xl">{tab.emoji}</span>
-                                        <div className="flex-1">
-                                            <div className="text-sm font-medium">{tab.name}</div>
-                                            {status === 'available' && tab.unlockCost && (
-                                                <div className="text-xs opacity-80 mt-1 space-y-0.5">
-                                                    {formatCost(tab.unlockCost).map((cost, index) => (
-                                                        <div key={index}>{cost}</div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {status === 'locked' && tab.unlockCost && (
-                                                <div className="text-xs opacity-60 mt-1 space-y-0.5">
-                                                    {formatCost(tab.unlockCost).map((cost, index) => (
-                                                        <div key={index}>{cost}</div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </button>
+                                    {subTabs.map(subTab => (
+                                        <NavSubItem
+                                            key={subTab.id}
+                                            label={subTab.name}
+                                            emoji={subTab.emoji}
+                                            isActive={activeTab === subTab.id}
+                                            onClick={() => onTabChange(subTab.id)}
+                                        />
+                                    ))}
+                                </CustomNavItem>
                             );
                         })}
                     </div>

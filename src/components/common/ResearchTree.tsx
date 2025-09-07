@@ -41,7 +41,7 @@ const ResearchTree: React.FC<ResearchTreeProps> = ({ onNodeClick }) => {
     return prerequisitesMet && notAlreadyUnlocked && notCompleted && canAffordResearch(node);
   };
 
-  const formatCost = (cost: any) => {
+  const formatCost = (cost: Record<string, number | undefined>) => {
     // Only show research data cost
     if (cost.researchData) {
       return `${cost.researchData} Research Points`;
@@ -97,7 +97,8 @@ const ResearchTree: React.FC<ResearchTreeProps> = ({ onNodeClick }) => {
   const treeData = buildTreeData();
 
   // Custom node renderer
-  const renderCustomNode = ({ nodeDatum }: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderCustomNode = ({ nodeDatum }: { nodeDatum: any }) => {
     const data = nodeDatum as TreeNodeData;
 
     const getNodeStyle = () => {

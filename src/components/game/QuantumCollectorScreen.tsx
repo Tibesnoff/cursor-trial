@@ -2,8 +2,13 @@ import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
 import { calculateClickPowerIncrease } from 'src/utils/clickCalculations';
+import QuantumCollectorUpgrades from './QuantumCollectorUpgrades';
 
-const QuantumCollectorScreen = () => {
+interface QuantumCollectorScreenProps {
+    activeSubTab?: 'collectors' | 'upgrades';
+}
+
+const QuantumCollectorScreen = ({ activeSubTab = 'collectors' }: QuantumCollectorScreenProps) => {
     const { energyCollectors, upgrades } = useGameState();
     const { clickEnergy, buyBasicCollector, buyQuantumReactor, buyStellarForge, buyVoidExtractor, buyDimensionalRift, buyCosmicGenerator, upgradeClickPower } = useGameActions();
 
@@ -62,21 +67,27 @@ const QuantumCollectorScreen = () => {
     };
 
     return (
-        <CollectorScreen
-            title="⚡ Quantum Collector"
-            description="Click to harvest quantum energy from the cosmic void"
-            collectors={ENERGY_COLLECTORS}
-            collectorCounts={energyCollectors}
-            production={energyProduction}
-            clickPower={clickPower}
-            buyActions={buyActions}
-            onCollect={clickEnergy}
-            onUpgradeClick={upgradeClickPower}
-            resourceEmoji="⚡"
-            resourceName="Energy"
-            clickUpgradeCost={clickUpgradeCost}
-            clickPowerIncrease={clickPowerIncrease}
-        />
+        <div className="space-y-6">
+            {activeSubTab === 'collectors' && (
+                <CollectorScreen
+                    title="⚡ Quantum Collector"
+                    description="Click to harvest quantum energy from the cosmic void"
+                    collectors={ENERGY_COLLECTORS}
+                    collectorCounts={energyCollectors}
+                    production={energyProduction}
+                    clickPower={clickPower}
+                    buyActions={buyActions}
+                    onCollect={clickEnergy}
+                    onUpgradeClick={upgradeClickPower}
+                    resourceEmoji="⚡"
+                    resourceName="Energy"
+                    clickUpgradeCost={clickUpgradeCost}
+                    clickPowerIncrease={clickPowerIncrease}
+                />
+            )}
+
+            {activeSubTab === 'upgrades' && <QuantumCollectorUpgrades />}
+        </div>
     );
 };
 

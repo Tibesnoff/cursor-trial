@@ -1,6 +1,10 @@
 import type { GameState } from 'src/types';
+import { RESEARCH_NODES } from 'src/config/research';
 
-const canAffordCost = (state: GameState, cost: any): boolean => {
+const canAffordCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+): boolean => {
   return Object.entries(cost).every(([resource, amount]) => {
     if (!amount) return true;
     return (
@@ -10,7 +14,10 @@ const canAffordCost = (state: GameState, cost: any): boolean => {
   });
 };
 
-const deductCost = (state: GameState, cost: any) => {
+const deductCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+) => {
   Object.entries(cost).forEach(([resource, amount]) => {
     if (amount) {
       state.resources[resource as keyof typeof state.resources] -=
@@ -229,8 +236,6 @@ export const completeResearchNode = (
 
 // Helper function to apply research effects
 const applyResearchEffects = (state: GameState, nodeId: string) => {
-  // Import RESEARCH_NODES to get the effects
-  const { RESEARCH_NODES } = require('../../config/research');
   const node = RESEARCH_NODES.find(n => n.id === nodeId);
 
   if (!node) return;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CollectorConfig } from 'src/types';
+import type { CollectorConfig, BuildingCost } from 'src/types';
 import CollectorCard from './CollectorCard';
 
 interface CollectorsGridProps {
@@ -7,9 +7,9 @@ interface CollectorsGridProps {
     collectorCounts: Record<string, number>;
     resourceEmoji: string;
     resourceName: string;
-    calculateActualCost: (collector: CollectorConfig) => any;
-    canAfford: (cost: any) => boolean;
-    formatCost: (cost: any) => string;
+    calculateActualCost: (collector: CollectorConfig) => BuildingCost;
+    canAfford: (cost: BuildingCost) => boolean;
+    formatCost: (cost: BuildingCost) => string;
     buyActions: Record<string, () => void>;
 }
 

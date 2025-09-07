@@ -23,21 +23,21 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
 
     const tabs: TabConfig[] = [
         { id: 'clicker', name: 'Quantum Collector', emoji: '⚡' }, // Always unlocked
-        { 
-            id: 'crystals', 
-            name: 'Crystal Mine', 
+        {
+            id: 'crystals',
+            name: 'Crystal Mine',
             emoji: '💎',
             unlockCost: { quantumEnergy: 10000 }
         },
-        { 
-            id: 'science', 
-            name: 'Science', 
+        {
+            id: 'science',
+            name: 'Science',
             emoji: '🧪',
             unlockCost: { quantumEnergy: 100000, quantumCrystals: 5000 }
         },
-        { 
-            id: 'defense', 
-            name: 'Defense', 
+        {
+            id: 'defense',
+            name: 'Defense',
             emoji: '🛡️',
             unlockCost: { quantumEnergy: 1000000, quantumCrystals: 50000, researchData: 1000 }
         },
@@ -87,7 +87,7 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
         }
     };
 
-    const formatCost = (cost: any) => {
+    const formatCost = (cost: Record<string, number | undefined>) => {
         return Object.entries(cost)
             .map(([resource, amount]) => {
                 const emojiMap: Record<string, string> = {

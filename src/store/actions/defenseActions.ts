@@ -1,6 +1,9 @@
 import type { GameState } from 'src/types';
 
-const canAffordCost = (state: GameState, cost: any): boolean => {
+const canAffordCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+): boolean => {
   return Object.entries(cost).every(([resource, amount]) => {
     if (!amount) return true;
     return (
@@ -10,7 +13,10 @@ const canAffordCost = (state: GameState, cost: any): boolean => {
   });
 };
 
-const deductCost = (state: GameState, cost: any) => {
+const deductCost = (
+  state: GameState,
+  cost: Record<string, number | undefined>
+) => {
   Object.entries(cost).forEach(([resource, amount]) => {
     if (amount) {
       state.resources[resource as keyof typeof state.resources] -=

@@ -1,4 +1,5 @@
 import { useAppDispatch } from '../store/hooks';
+import type { GameState } from '../types';
 import {
   clickEnergy,
   clickCrystals,
@@ -85,7 +86,7 @@ export const useGameActions = () => {
       dispatch(completeResearchNode(nodeId)),
 
     // Tab actions
-    unlockTab: (tabId: string, cost: any) =>
+    unlockTab: (tabId: string, cost: Record<string, number | undefined>) =>
       dispatch(unlockTab({ tabId, cost })),
 
     // Development actions
@@ -93,7 +94,7 @@ export const useGameActions = () => {
     unlockAllTabs: () => dispatch(unlockAllTabs()),
 
     // Save/Load actions
-    loadGameState: (state: any) => dispatch(loadGameState(state)),
+    loadGameState: (state: GameState) => dispatch(loadGameState(state)),
     resetGameState: () => dispatch(resetGameState()),
   };
 };

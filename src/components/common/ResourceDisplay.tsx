@@ -1,13 +1,14 @@
 import { useResources } from 'src/hooks';
 import { RESOURCE_TYPES } from 'src/constants';
 import { Card } from 'src/components/ui';
+import type { ResourceType } from 'src/types';
 
 const ResourceDisplay = () => {
     const resources = useResources();
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {RESOURCE_TYPES.map((resource: any) => {
+            {RESOURCE_TYPES.map((resource: ResourceType) => {
                 const value = resources[resource.key as keyof typeof resources];
                 return (
                     <Card

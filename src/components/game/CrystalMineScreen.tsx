@@ -2,8 +2,13 @@ import { useGameState, useGameActions } from 'src/hooks';
 import { CRYSTAL_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
 import { calculateCrystalClickPowerIncrease } from 'src/utils/clickCalculations';
+import CrystalMineUpgrades from './CrystalMineUpgrades';
 
-const CrystalMineScreen = () => {
+interface CrystalMineScreenProps {
+    activeSubTab?: 'collectors' | 'upgrades';
+}
+
+const CrystalMineScreen = ({ activeSubTab = 'collectors' }: CrystalMineScreenProps) => {
     const { crystalCollectors, upgrades } = useGameState();
     const { clickCrystals, buyBasicMine, buyQuantumDrill, buyStellarExtractor, buyVoidHarvester, buyDimensionalMine, buyCosmicRefinery, upgradeCrystalClickPower } = useGameActions();
 
@@ -62,21 +67,27 @@ const CrystalMineScreen = () => {
     };
 
     return (
-        <CollectorScreen
-            title="💎 Crystal Mine"
-            description="Click to extract quantum crystals from dimensional pockets"
-            collectors={CRYSTAL_COLLECTORS}
-            collectorCounts={crystalCollectors}
-            production={crystalProduction}
-            clickPower={clickPower}
-            buyActions={buyActions}
-            onCollect={clickCrystals}
-            onUpgradeClick={upgradeCrystalClickPower}
-            resourceEmoji="💎"
-            resourceName="Crystals"
-            clickUpgradeCost={clickUpgradeCost}
-            clickPowerIncrease={clickPowerIncrease}
-        />
+        <div className="space-y-6">
+            {activeSubTab === 'collectors' && (
+                <CollectorScreen
+                    title="💎 Crystal Mine"
+                    description="Click to extract quantum crystals from dimensional pockets"
+                    collectors={CRYSTAL_COLLECTORS}
+                    collectorCounts={crystalCollectors}
+                    production={crystalProduction}
+                    clickPower={clickPower}
+                    buyActions={buyActions}
+                    onCollect={clickCrystals}
+                    onUpgradeClick={upgradeCrystalClickPower}
+                    resourceEmoji="💎"
+                    resourceName="Crystals"
+                    clickUpgradeCost={clickUpgradeCost}
+                    clickPowerIncrease={clickPowerIncrease}
+                />
+            )}
+
+            {activeSubTab === 'upgrades' && <CrystalMineUpgrades />}
+        </div>
     );
 };
 

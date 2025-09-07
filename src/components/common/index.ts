@@ -7,3 +7,4 @@ export { default as SaveManager } from './SaveManager';
 export { default as PageHeader } from './PageHeader';
 export { default as StatsDisplay } from './StatsDisplay';
 export { default as CostDisplay } from './CostDisplay';
+export { default as CustomNavItem, NavSubItem } from './CustomNavItem';
