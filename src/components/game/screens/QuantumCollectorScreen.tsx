@@ -2,7 +2,7 @@ import { useGameState, useGameActions } from 'src/hooks';
 import { ENERGY_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
 import { calculateClickPowerIncrease } from 'src/utils/clickCalculations';
-import QuantumCollectorUpgrades from './QuantumCollectorUpgrades';
+import QuantumCollectorUpgrades from '../upgrades/QuantumCollectorUpgrades';
 
 interface QuantumCollectorScreenProps {
     activeSubTab?: 'collectors' | 'upgrades';

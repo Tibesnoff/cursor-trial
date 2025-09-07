@@ -1,4 +1,4 @@
-import { SaveManager } from 'src/components/common';
+import { SaveManager } from 'src/components/ui';
 
 const SettingsTab = () => {
     return (

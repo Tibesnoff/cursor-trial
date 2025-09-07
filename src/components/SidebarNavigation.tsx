@@ -1,5 +1,5 @@
 import { useGameState, useGameActions, useUnlockedTabs } from 'src/hooks';
-import CustomNavItem, { NavSubItem } from 'src/components/common/CustomNavItem';
+import { CustomNavItem, NavSubItem } from 'src/components/navigation';
 
 interface SidebarNavigationProps {
     activeTab: string;
@@ -61,7 +61,6 @@ const SidebarNavigation = ({ activeTab, onTabChange }: SidebarNavigationProps) =
             case 'science':
                 return [
                     { id: 'science-research', name: 'Research Tree', emoji: '🌳' },
-                    { id: 'science-production', name: 'Production', emoji: '🏭' },
                 ];
             case 'misc':
                 return [

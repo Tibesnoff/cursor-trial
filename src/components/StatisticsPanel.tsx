@@ -1,6 +1,6 @@
 import { useGameState } from 'src/hooks';
 import { Card } from 'src/components/ui';
-import { SaveManager } from 'src/components/common';
+import { SaveManager } from 'src/components/ui';
 
 const StatisticsPanel = () => {
     const { statistics, energyCollectors, crystalCollectors, research, defense } = useGameState();

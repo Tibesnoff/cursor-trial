@@ -1,6 +1,6 @@
-import AnalyticsTab from './AnalyticsTab';
-import SettingsTab from './SettingsTab';
-import AchievementsTab from './AchievementsTab';
+import AnalyticsTab from '../tabs/AnalyticsTab';
+import SettingsTab from '../tabs/SettingsTab';
+import AchievementsTab from '../tabs/AchievementsTab';
 
 interface MiscScreenProps {
     activeSubTab?: 'analytics' | 'settings' | 'achievements';

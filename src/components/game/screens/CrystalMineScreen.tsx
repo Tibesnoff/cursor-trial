@@ -2,7 +2,7 @@ import { useGameState, useGameActions } from 'src/hooks';
 import { CRYSTAL_COLLECTORS } from 'src/config';
 import { CollectorScreen } from 'src/components/common';
 import { calculateCrystalClickPowerIncrease } from 'src/utils/clickCalculations';
-import CrystalMineUpgrades from './CrystalMineUpgrades';
+import CrystalMineUpgrades from '../upgrades/CrystalMineUpgrades';
 
 interface CrystalMineScreenProps {
     activeSubTab?: 'collectors' | 'upgrades';

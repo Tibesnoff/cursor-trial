@@ -7,7 +7,7 @@ import {
 } from 'src/store/slices/gameSlice';
 import { Header, QuantumCollectorScreen, CrystalMineScreen, ScienceScreen, DefenseScreen, MiscScreen } from 'src/components/game';
 import SidebarNavigation from 'src/components/SidebarNavigation';
-import { StickyResourceBar } from 'src/components/common';
+import { StickyResourceBar } from 'src/components/ui';
 import { useAutoSave } from 'src/hooks/useAutoSave';
 import { loadFromLocalStorage } from 'src/utils/saveManager';
 import { loadGameState } from 'src/store/slices/gameSlice';
@@ -73,9 +73,7 @@ const GameContainer = () => {
             // Science tabs
             case 'science':
             case 'science-research':
-                return <ScienceScreen activeSubTab="research" />;
-            case 'science-production':
-                return <ScienceScreen activeSubTab="production" />;
+                return <ScienceScreen />;
 
             // Defense tab
             case 'defense':
